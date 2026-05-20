@@ -423,8 +423,9 @@ export function SpaceCanvas() {
               sides.push(prefBelow ? above : below);
 
               let chosen: { box: Box; cand: Cand } | null = null;
-              for (const cand of sides) {
-                for (let push = 0; push < 12; push++) {
+              // Try every side at small push before escalating, so labels stay close.
+              outer: for (let push = 0; push < 8; push++) {
+                for (const cand of sides) {
                   const off = push * (h + 2 * inv) * (cand.dy < 0 ? -1 : 1);
                   const labelLeft =
                     cand.anchor === "start"
@@ -436,10 +437,9 @@ export function SpaceCanvas() {
                   const box = { x: labelLeft - 1 * inv, y: labelTop, w: w + 2 * inv, h };
                   if (!placed.some((b) => overlap(b, box))) {
                     chosen = { box, cand: { ...cand, dy: cand.dy + off } };
-                    break;
+                    break outer;
                   }
                 }
-                if (chosen) break;
               }
               if (!chosen) {
                 const cand = sides[0];
