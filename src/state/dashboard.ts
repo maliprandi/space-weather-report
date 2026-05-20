@@ -25,6 +25,10 @@ interface DashState {
   selectedId: string | null;
   select: (id: string | null) => void;
 
+  selectedMissionId: string | null;
+  selectMission: (id: string | null) => void;
+
+
   loading: boolean;
   setLoading: (l: boolean) => void;
   error: string | null;
