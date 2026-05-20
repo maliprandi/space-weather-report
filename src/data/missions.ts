@@ -205,7 +205,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Mars 2020 Perseverance Rover",
     type: "mars",
     anchor: "mars",
-    x: -2, y: 38,
+    x: -14, y: 38,
     status: "active",
     country: "USA",
     flag: "🇺🇸",
