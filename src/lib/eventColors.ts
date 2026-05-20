@@ -6,5 +6,5 @@ export const TYPE_COLOR: Record<EventType, string> = {
   flare: "#f97316", // orange
   cme: "#eab308",   // yellow
   gst: "#a78bfa",   // purple
-  neo: "#22d3ee",   // cyan
+  neo: "#22c55e",   // green
 };
