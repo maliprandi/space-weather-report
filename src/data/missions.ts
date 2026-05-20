@@ -259,7 +259,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Mars Atmosphere and Volatile EvolutioN",
     type: "mars",
     anchor: "mars",
-    x: -42, y: -22,
+    x: -66, y: -24,
     status: "active",
     country: "USA",
     flag: "🇺🇸",
