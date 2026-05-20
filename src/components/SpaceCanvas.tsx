@@ -140,7 +140,7 @@ export function SpaceCanvas() {
       if (!ctm) return;
       const p = pt.matrixTransform(ctm.inverse());
       const factor = Math.exp(-e.deltaY * 0.0015);
-      zoomAt(p.x, p.y, scale * factor);
+      zoomAt(p.x, p.y, factor);
     };
     window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
@@ -153,7 +153,8 @@ export function SpaceCanvas() {
   const onMouseMove = (e: React.MouseEvent) => {
     if (!dragging.current) return;
     const p = clientToSvg(e.clientX, e.clientY);
-    setView((view) => ({ ...view, tx: p.x - dragging.current!.x, ty: p.y - dragging.current!.y }));
+    const drag = dragging.current;
+    setView((view) => ({ ...view, tx: p.x - drag.x, ty: p.y - drag.y }));
   };
   const onMouseUp = () => {
     dragging.current = null;
