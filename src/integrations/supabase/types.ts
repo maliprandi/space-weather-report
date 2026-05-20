@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      nasa_cache: {
+        Row: {
+          cache_key: string
+          endpoint: string
+          expires_at: string
+          fetched_at: string
+          payload: Json
+        }
+        Insert: {
+          cache_key: string
+          endpoint: string
+          expires_at: string
+          fetched_at?: string
+          payload: Json
+        }
+        Update: {
+          cache_key?: string
+          endpoint?: string
+          expires_at?: string
+          fetched_at?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
