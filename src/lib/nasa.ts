@@ -42,11 +42,20 @@ export function rangeLastNDays(n: number): { start: string; end: string } {
   return { start: isoDay(start), end: isoDay(end) };
 }
 
+const FUNCTIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
+const ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+
 async function callFn<T>(name: string, params: Record<string, string>): Promise<T> {
   const qs = new URLSearchParams(params).toString();
-  const { data, error } = await supabase.functions.invoke(`${name}?${qs}`, { method: "GET" });
-  if (error) throw error;
-  return data as T;
+  const url = `${FUNCTIONS_URL}/${name}${qs ? `?${qs}` : ""}`;
+  const r = await fetch(url, {
+    headers: {
+      apikey: ANON,
+      Authorization: `Bearer ${ANON}`,
+    },
+  });
+  if (!r.ok) throw new Error(`${name} ${r.status}: ${await r.text()}`);
+  return (await r.json()) as T;
 }
 
 export async function fetchDonki(start: string, end: string) {
