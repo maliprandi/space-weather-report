@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { DashEvent, EventType } from "@/lib/nasa";
 
-export type LayerKey = EventType | "missions" | "epic";
+export type LayerKey = EventType | "missions" | "epic" | "orbits";
 
 interface DashState {
   events: DashEvent[];
