@@ -295,7 +295,7 @@ export const MISSIONS: Mission[] = [
     fullName: "ExoMars Trace Gas Orbiter",
     type: "mars",
     anchor: "mars",
-    x: 44, y: 24,
+    x: 41, y: 41,
     status: "active",
     country: "Europe · Russia",
     flag: "🇪🇺",
