@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDash } from "@/state/dashboard";
-import { THREAT_COLOR } from "@/lib/threat";
+import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS } from "@/data/missions";
 import type { DashEvent } from "@/lib/nasa";
 
@@ -11,6 +11,22 @@ const SUN_Y = H / 2;
 const EARTH_X = 1100;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
+// Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
+const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
+
+function niceRound(n: number): number {
+  const exp = Math.floor(Math.log10(n));
+  const base = n / Math.pow(10, exp);
+  const nice = base < 1.5 ? 1 : base < 3.5 ? 2 : base < 7.5 ? 5 : 10;
+  return nice * Math.pow(10, exp);
+}
+
+function formatKm(km: number): string {
+  if (km >= 1e6) return `${(km / 1e6).toFixed(km / 1e6 < 10 ? 1 : 0)} M km`;
+  if (km >= 1e3) return `${(km / 1e3).toFixed(0)} k km`;
+  return `${km.toFixed(0)} km`;
+}
+
 
 // Earth-Sun distance ≈ 150e6 km. CME travel: ms = (150e6 / speed) * 1000
 function cmeTravelMs(speedKms?: number) {
@@ -67,6 +83,18 @@ export function SpaceCanvas() {
   const [scale, setScale] = useState(1);
   const dragging = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dims, setDims] = useState({ w: 1, h: 1 });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const update = () => setDims({ w: el.clientWidth, h: el.clientHeight });
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     const handler = (e: WheelEvent) => {
@@ -101,20 +129,22 @@ export function SpaceCanvas() {
   const gsts = active.filter((a) => a.ev.type === "gst");
   const neos = active.filter((a) => a.ev.type === "neo");
 
-  const maxFlareThreat = flares.reduce((m, a) => {
-    const order = ["none", "low", "moderate", "high", "severe"];
-    return Math.max(m, order.indexOf(a.ev.threat));
-  }, -1);
-  const flareGlowColor = maxFlareThreat >= 0 ? THREAT_COLOR[(["none","low","moderate","high","severe"] as const)[maxFlareThreat]] : null;
+  const flareGlowColor = flares.length > 0 ? TYPE_COLOR.flare : null;
+  const gstGlowColor = gsts.length > 0 ? TYPE_COLOR.gst : null;
 
-  const maxGstThreat = gsts.reduce((m, a) => {
-    const order = ["none", "low", "moderate", "high", "severe"];
-    return Math.max(m, order.indexOf(a.ev.threat));
-  }, -1);
-  const gstGlowColor = maxGstThreat >= 0 ? THREAT_COLOR[(["none","low","moderate","high","severe"] as const)[maxGstThreat]] : null;
+
+  // Distance scale: compute how many real km a ~180px bar represents at current zoom.
+  // SVG uses preserveAspectRatio="xMidYMid slice": svg-units-per-screen-pixel =
+  // min(W/containerW, H/containerH).
+  const svgPerPx = dims.w > 0 && dims.h > 0 ? Math.min(W / dims.w, H / dims.h) : 1;
+  const TARGET_PX = 180;
+  const rawKm = (TARGET_PX * svgPerPx * KM_PER_UNIT) / scale;
+  const niceKm = niceRound(rawKm);
+  const scaleBarPx = (niceKm / KM_PER_UNIT) * scale / svgPerPx;
 
   return (
     <div
+      ref={containerRef}
       className="relative h-full w-full overflow-hidden bg-[#05070d] cursor-grab active:cursor-grabbing"
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
@@ -174,7 +204,7 @@ export function SpaceCanvas() {
             const distance = 60 + progress * 900;
             const x = SUN_X + Math.cos(angle) * distance;
             const y = SUN_Y + Math.sin(angle) * distance;
-            const color = THREAT_COLOR[ev.threat];
+            const color = TYPE_COLOR.cme;
             return (
               <g key={ev.id}>
                 <path
@@ -239,7 +269,7 @@ export function SpaceCanvas() {
             const r = 90 + (Math.abs((ev.angleDeg ?? 0)) * 2);
             const x = EARTH_X + Math.cos(angle + Math.PI) * r;
             const y = EARTH_Y + Math.sin(angle + Math.PI) * r;
-            const color = THREAT_COLOR[ev.threat];
+            const color = TYPE_COLOR.neo;
             return (
               <g key={ev.id} onClick={() => select(ev.id)} className="cursor-pointer">
                 <line x1={x} y1={y} x2={EARTH_X} y2={EARTH_Y} stroke={color} strokeWidth={0.8} opacity={0.5} strokeDasharray="2 3" />
@@ -254,7 +284,7 @@ export function SpaceCanvas() {
             const r = 90;
             const x = SUN_X + Math.cos(offsetAngle) * r;
             const y = SUN_Y + Math.sin(offsetAngle) * r;
-            const color = THREAT_COLOR[ev.threat];
+            const color = TYPE_COLOR.flare;
             return (
               <circle
                 key={ev.id}
@@ -276,7 +306,7 @@ export function SpaceCanvas() {
             const r = 85;
             const x = EARTH_X + Math.cos(a) * r;
             const y = EARTH_Y + Math.sin(a) * r;
-            const color = THREAT_COLOR[ev.threat];
+            const color = TYPE_COLOR.gst;
             return (
               <circle
                 key={ev.id}
@@ -316,6 +346,27 @@ export function SpaceCanvas() {
         >
           RESET VIEW
         </button>
+      </div>
+
+      {/* Distance scale */}
+      <div className="pointer-events-none absolute bottom-4 right-4 font-mono text-[10px] text-slate-300">
+        <div className="mb-1 text-right tracking-widest text-slate-500">SCALE</div>
+        <div className="flex items-end gap-2">
+          <div className="flex flex-col items-start">
+            <div
+              className="relative h-2 border-x border-b border-slate-300"
+              style={{ width: `${scaleBarPx}px` }}
+            >
+              <div className="absolute left-1/2 top-0 h-2 w-px bg-slate-300" />
+            </div>
+            <div className="mt-1 text-slate-300" style={{ width: `${scaleBarPx}px`, textAlign: "center" }}>
+              {formatKm(niceKm)}
+            </div>
+          </div>
+        </div>
+        <div className="mt-1 text-right text-[9px] text-slate-600">
+          Sun→Earth 149.6M km · Earth→Moon 384k km
+        </div>
       </div>
     </div>
   );

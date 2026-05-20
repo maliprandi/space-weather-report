@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDash } from "@/state/dashboard";
-import { THREAT_COLOR } from "@/lib/threat";
+import { TYPE_COLOR } from "@/lib/eventColors";
 
 const SPEEDS: { label: string; ms: number }[] = [
   { label: "30M/S", ms: 30 * 60_000 },
@@ -118,8 +118,8 @@ export function Timeline() {
                   top: `${row * 100}%`,
                   width: selectedId === ev.id ? 12 : 7,
                   height: selectedId === ev.id ? 12 : 7,
-                  background: THREAT_COLOR[ev.threat],
-                  boxShadow: `0 0 6px ${THREAT_COLOR[ev.threat]}`,
+                  background: TYPE_COLOR[ev.type],
+                  boxShadow: `0 0 6px ${TYPE_COLOR[ev.type]}`,
                 }}
                 title={`${ev.title} — ${new Date(ev.time).toISOString().slice(0, 16)}`}
               />

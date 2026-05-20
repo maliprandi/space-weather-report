@@ -1,12 +1,13 @@
 import { useDash, type LayerKey } from "@/state/dashboard";
 import { THREAT_COLOR, THREAT_LABEL } from "@/lib/threat";
+import { TYPE_COLOR } from "@/lib/eventColors";
 import { useMemo } from "react";
 
 const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[] = [
-  { key: "flare", label: "Solar Flares", color: "#f97316", hint: "NASA DONKI · FLR" },
-  { key: "cme", label: "Coronal Mass Ejections", color: "#eab308", hint: "NASA DONKI · CME" },
-  { key: "gst", label: "Geomagnetic Storms", color: "#a78bfa", hint: "NASA DONKI · GST" },
-  { key: "neo", label: "Near-Earth Objects", color: "#22d3ee", hint: "NASA NeoWs feed" },
+  { key: "flare", label: "Solar Flares", color: TYPE_COLOR.flare, hint: "NASA DONKI · FLR" },
+  { key: "cme", label: "Coronal Mass Ejections", color: TYPE_COLOR.cme, hint: "NASA DONKI · CME" },
+  { key: "gst", label: "Geomagnetic Storms", color: TYPE_COLOR.gst, hint: "NASA DONKI · GST" },
+  { key: "neo", label: "Near-Earth Objects", color: TYPE_COLOR.neo, hint: "NASA NeoWs feed" },
   { key: "missions", label: "Cislunar Assets", color: "#22d3ee", hint: "Curated missions" },
   { key: "epic", label: "EPIC Earth Disk", color: "#60a5fa", hint: "NASA EPIC (TBD)" },
 ];
@@ -19,8 +20,8 @@ export function RightRail() {
     <aside className="flex h-full w-[380px] shrink-0 flex-col border-l border-cyan-950/60 bg-[#070b14] font-mono text-[11px] text-slate-300">
       <div className="border-b border-cyan-950/60 px-4 py-3">
         <div className="flex items-center justify-between">
-          <span className="rounded-sm border border-cyan-700/60 px-2 py-0.5 text-[10px] tracking-[0.2em] text-cyan-300">DARK-OPS</span>
-          <span className="text-[10px] tracking-widest text-slate-500">LAYERS · 6 AVAILABLE</span>
+          <span className="text-[10px] tracking-[0.25em] text-slate-400">DATA LAYERS</span>
+          <span className="text-[10px] tracking-widest text-slate-500">6 AVAILABLE</span>
         </div>
       </div>
 
