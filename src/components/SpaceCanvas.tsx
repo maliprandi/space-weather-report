@@ -349,16 +349,18 @@ export function SpaceCanvas() {
 
             {/* Moon orbit */}
             <circle cx={EARTH_X} cy={EARTH_Y} r={MOON_OFFSET} fill="none" stroke="#1e293b" strokeDasharray="2 4" />
-            <image
-              href={moonImg}
-              x={EARTH_X + MOON_OFFSET - 16}
-              y={EARTH_Y - 16}
-              width={32}
-              height={32}
-              style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
-            />
-            <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
-            <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 44} textAnchor="middle" fill="#475569" fontSize={7} fontFamily="ui-monospace,monospace">0.0026 AU</text>
+            <g onClick={(e) => { e.stopPropagation(); selectInfo("moon"); }} style={{ cursor: "pointer" }}>
+              <image
+                href={moonImg}
+                x={EARTH_X + MOON_OFFSET - 16}
+                y={EARTH_Y - 16}
+                width={32}
+                height={32}
+                style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
+              />
+              <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
+              <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 44} textAnchor="middle" fill="#475569" fontSize={7} fontFamily="ui-monospace,monospace">0.0026 AU</text>
+            </g>
           </g>
 
           {/* MARS */}
