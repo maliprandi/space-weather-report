@@ -1,11 +1,12 @@
 // Curated spacecraft asset catalog. Approximate positions for visualization only.
-// x/y are in canvas units relative to Earth (Earth at 0,0). Positive x toward Moon.
+// x/y are offsets in canvas units from the anchor body (default: Earth).
 export interface Mission {
   id: string;
   name: string;
   fullName: string;
-  type: "leo" | "lagrange" | "lunar" | "deep";
-  x: number; // px offset from Earth
+  type: "leo" | "lagrange" | "lunar" | "deep" | "mars";
+  anchor?: "earth" | "mars";
+  x: number;
   y: number;
   status: "active" | "planned";
   country: string;
@@ -16,7 +17,7 @@ export interface Mission {
   crew?: string;
   payload: string;
   mission: string;
-  orbit: string; // e.g. "≈408 km altitude (LEO)"
+  orbit: string;
   description: string;
 }
 
