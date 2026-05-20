@@ -38,9 +38,10 @@ export function RightRail() {
   }, [selectedMissionId]);
   useEffect(() => {
     if ((selectedId || selectedInfoId) && scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
     }
   }, [selectedId, selectedInfoId]);
+
 
   return (
     <aside className="flex h-full w-[380px] shrink-0 flex-col border-l border-cyan-950/60 bg-[#070b14] font-mono text-[11px] text-slate-300">
