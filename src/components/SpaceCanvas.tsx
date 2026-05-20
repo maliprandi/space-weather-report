@@ -8,16 +8,16 @@ import moonImg from "@/assets/moon.png";
 import sunImg from "@/assets/sun.png";
 import marsImg from "@/assets/mars.png";
 
-const W = 2300;
-const H = 900;
-const SUN_X = 400;
+const W = 2800;
+const H = 1100;
+const SUN_X = 650;
 const SUN_Y = H / 2;
-const EARTH_X = 1300;
+const EARTH_X = 1550;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
 // Mars pushed out for visual clarity (not to scale) so lunar vs Martian
 // spacecraft clusters are unambiguously separated from the Earth–Moon system.
-const MARS_X = 2000;
+const MARS_X = 2250;
 const MARS_Y = H / 2;
 // Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
 const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
