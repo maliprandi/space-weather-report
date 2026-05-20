@@ -377,34 +377,115 @@ export function SpaceCanvas() {
           </g>
 
           {/* Missions */}
-          {layers.missions &&
-            MISSIONS.map((m) => {
-              const active = selectedMissionId === m.id;
-              const color = m.status === "planned" ? "transparent" : "#22d3ee";
+          {layers.missions && (() => {
+            const inv = 1 / Math.sqrt(Math.max(0.5, Math.min(scale, 3)));
+            // Layout labels with greedy collision avoidance. Marker positions
+            // are absolute and authoritative; only label placement varies.
+            type Box = { x: number; y: number; w: number; h: number };
+            const overlap = (a: Box, b: Box) =>
+              a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+            const placed: Box[] = [];
+            const markerHalf = 5 * inv + 1;
+            const charW = 5.4 * inv;
+            const labelH = 11 * inv;
+            const pad = 3 * inv;
+
+            // Reserve marker boxes first so labels don't sit on top of other markers.
+            const markers = MISSIONS.map((m) => {
               const ax = m.anchor === "mars" ? MARS_X : EARTH_X;
               const ay = m.anchor === "mars" ? MARS_Y : EARTH_Y;
-              // Inverse-scale markers (mildly) so they shrink relative to planets when zoomed in.
-              const inv = 1 / Math.sqrt(Math.max(0.5, Math.min(scale, 3)));
+              return { id: m.id, cx: ax + m.x, cy: ay + m.y };
+            });
+            markers.forEach((mk) =>
+              placed.push({ x: mk.cx - markerHalf, y: mk.cy - markerHalf, w: markerHalf * 2, h: markerHalf * 2 })
+            );
+
+            const layouts = MISSIONS.map((m, idx) => {
+              const mk = markers[idx];
+              const w = m.name.length * charW + 4 * inv;
+              const h = labelH;
+              // Preferred sides based on quadrant relative to anchor center.
+              const ax = m.anchor === "mars" ? MARS_X : EARTH_X;
+              const ay = m.anchor === "mars" ? MARS_Y : EARTH_Y;
+              const dx = mk.cx - ax;
+              const dy = mk.cy - ay;
+              const prefRight = dx >= 0;
+              const prefBelow = dy >= 0;
+              type Cand = { dx: number; dy: number; anchor: "start" | "end" | "middle" };
+              const sides: Cand[] = [];
+              const right: Cand = { dx: markerHalf + pad, dy: h / 3, anchor: "start" };
+              const left: Cand = { dx: -markerHalf - pad, dy: h / 3, anchor: "end" };
+              const below: Cand = { dx: 0, dy: markerHalf + h, anchor: "middle" };
+              const above: Cand = { dx: 0, dy: -markerHalf - pad, anchor: "middle" };
+              sides.push(prefRight ? right : left);
+              sides.push(prefRight ? left : right);
+              sides.push(prefBelow ? below : above);
+              sides.push(prefBelow ? above : below);
+
+              let chosen: { box: Box; cand: Cand } | null = null;
+              for (const cand of sides) {
+                for (let push = 0; push < 12; push++) {
+                  const off = push * (h + 2 * inv) * (cand.dy < 0 ? -1 : 1);
+                  const labelLeft =
+                    cand.anchor === "start"
+                      ? mk.cx + cand.dx
+                      : cand.anchor === "end"
+                        ? mk.cx + cand.dx - w
+                        : mk.cx + cand.dx - w / 2;
+                  const labelTop = mk.cy + cand.dy - h + off;
+                  const box = { x: labelLeft - 1 * inv, y: labelTop, w: w + 2 * inv, h };
+                  if (!placed.some((b) => overlap(b, box))) {
+                    chosen = { box, cand: { ...cand, dy: cand.dy + off } };
+                    break;
+                  }
+                }
+                if (chosen) break;
+              }
+              if (!chosen) {
+                const cand = sides[0];
+                const labelLeft =
+                  cand.anchor === "start" ? mk.cx + cand.dx : mk.cx + cand.dx - w;
+                chosen = {
+                  box: { x: labelLeft, y: mk.cy + cand.dy - h, w, h },
+                  cand,
+                };
+              }
+              placed.push(chosen.box);
+              return { mission: m, marker: mk, cand: chosen.cand };
+            });
+
+            return layouts.map(({ mission: m, marker: mk, cand }) => {
+              const active = selectedMissionId === m.id;
+              const color = m.status === "planned" ? "transparent" : "#22d3ee";
               return (
                 <g
                   key={m.id}
-                  transform={`translate(${ax + m.x} ${ay + m.y}) scale(${inv})`}
                   onClick={(e) => { e.stopPropagation(); selectMission(active ? null : m.id); }}
                   className="cursor-pointer"
                 >
-                  <rect x={-5} y={-5} width={10} height={10} fill={color} stroke="#22d3ee" strokeWidth={active ? 1.8 : 1} />
-                  {active && (
-                    <circle cx={0} cy={0} r={12} fill="none" stroke="#22d3ee" strokeWidth={1} opacity={0.6}>
-                      <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite" />
-                    </circle>
-                  )}
-                  <text x={8} y={3} fill={active ? "#e0f2fe" : "#94a3b8"} fontSize={9} fontFamily="ui-monospace,monospace">
+                  <g transform={`translate(${mk.cx} ${mk.cy}) scale(${inv})`}>
+                    <rect x={-5} y={-5} width={10} height={10} fill={color} stroke="#22d3ee" strokeWidth={active ? 1.8 : 1} />
+                    {active && (
+                      <circle cx={0} cy={0} r={12} fill="none" stroke="#22d3ee" strokeWidth={1} opacity={0.6}>
+                        <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                  </g>
+                  <text
+                    x={mk.cx + cand.dx}
+                    y={mk.cy + cand.dy}
+                    textAnchor={cand.anchor}
+                    fill={active ? "#e0f2fe" : "#94a3b8"}
+                    fontSize={9 * inv}
+                    fontFamily="ui-monospace,monospace"
+                  >
                     {m.name}
                   </text>
                 </g>
               );
-            })}
+            });
+          })()}
 
           {/* NEOs */}
           {neos.map(({ ev }) => {
