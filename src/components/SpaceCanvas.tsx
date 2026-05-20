@@ -85,9 +85,7 @@ const Starfield = () => {
 
 export function SpaceCanvas() {
   const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission, selectInfo } = useDash();
-  const [tx, setTx] = useState(0);
-  const [ty, setTy] = useState(0);
-  const [scale, setScale] = useState(1);
+  const [{ tx, ty, scale }, setView] = useState({ tx: 0, ty: 0, scale: 1 });
   const dragging = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,13 +102,16 @@ export function SpaceCanvas() {
   }, []);
 
   // Zoom anchored at a given SVG-space point: keep that point fixed under the cursor.
-  const zoomAt = (svgX: number, svgY: number, newScaleRaw: number) => {
-    const newScale = Math.min(3, Math.max(0.5, newScaleRaw));
-    setScale((s) => {
-      // Solve: svgX = newTx + worldX * newScale, where worldX = (svgX - tx) / s
-      setTx((t) => svgX - ((svgX - t) / s) * newScale);
-      setTy((t) => svgY - ((svgY - t) / s) * newScale);
-      return newScale;
+  const zoomAt = (svgX: number, svgY: number, factor: number) => {
+    setView((view) => {
+      const newScale = Math.min(3, Math.max(0.5, view.scale * factor));
+      const worldX = (svgX - view.tx) / view.scale;
+      const worldY = (svgY - view.ty) / view.scale;
+      return {
+        scale: newScale,
+        tx: svgX - worldX * newScale,
+        ty: svgY - worldY * newScale,
+      };
     });
   };
 
@@ -139,7 +140,7 @@ export function SpaceCanvas() {
       if (!ctm) return;
       const p = pt.matrixTransform(ctm.inverse());
       const factor = Math.exp(-e.deltaY * 0.0015);
-      zoomAt(p.x, p.y, scale * factor);
+      zoomAt(p.x, p.y, factor);
     };
     window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
@@ -152,8 +153,8 @@ export function SpaceCanvas() {
   const onMouseMove = (e: React.MouseEvent) => {
     if (!dragging.current) return;
     const p = clientToSvg(e.clientX, e.clientY);
-    setTx(p.x - dragging.current.x);
-    setTy(p.y - dragging.current.y);
+    const drag = dragging.current;
+    setView((view) => ({ ...view, tx: p.x - drag.x, ty: p.y - drag.y }));
   };
   const onMouseUp = () => {
     dragging.current = null;
@@ -165,7 +166,7 @@ export function SpaceCanvas() {
     if (!el) return;
     const rect = el.getBoundingClientRect();
     const { x, y } = clientToSvg(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    zoomAt(x, y, newScaleRaw);
+    zoomAt(x, y, newScaleRaw / scale);
   };
 
   // Active events at cursor
@@ -483,7 +484,7 @@ export function SpaceCanvas() {
           −
         </button>
         <button
-          onClick={() => { setScale(1); setTx(0); setTy(0); }}
+          onClick={() => setView({ scale: 1, tx: 0, ty: 0 })}
           className="border border-cyan-900 bg-black/60 px-3 py-1 text-cyan-300 hover:bg-cyan-950 tracking-widest"
         >
           RESET VIEW
