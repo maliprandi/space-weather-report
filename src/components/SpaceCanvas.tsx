@@ -15,8 +15,9 @@ const SUN_Y = H / 2;
 const EARTH_X = 1100;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
-// Mars: 1.524 AU. 1 AU = (EARTH_X - SUN_X) = 900 svg units.
-const MARS_X = SUN_X + Math.round(900 * 1.524); // ≈ 1572
+// Mars pushed out for visual clarity (not to scale) so lunar vs Martian
+// spacecraft clusters are unambiguously separated from the Earth–Moon system.
+const MARS_X = 1800;
 const MARS_Y = H / 2;
 // Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
 const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
