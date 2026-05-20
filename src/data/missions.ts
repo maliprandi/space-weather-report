@@ -331,7 +331,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Tianwen-1 Orbiter",
     type: "mars",
     anchor: "mars",
-    x: 36, y: 38,
+    x: 70, y: 40,
     status: "active",
     country: "China",
     flag: "🇨🇳",
