@@ -3,6 +3,7 @@ import { useDash } from "@/state/dashboard";
 import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS } from "@/data/missions";
 import type { DashEvent } from "@/lib/nasa";
+import earthImg from "@/assets/earth.png";
 
 const W = 1600;
 const H = 900;
@@ -235,7 +236,14 @@ export function SpaceCanvas() {
                 <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite" />
               </circle>
             )}
-            <circle cx={EARTH_X} cy={EARTH_Y} r={48} fill="url(#earthGrad)" stroke="#3b82f6" strokeWidth={1} />
+            <image
+              href={earthImg}
+              x={EARTH_X - 52}
+              y={EARTH_Y - 52}
+              width={104}
+              height={104}
+              style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
+            />
             <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
 
             {/* Earth orbital zones (stylized — not to scale) */}
