@@ -18,6 +18,7 @@ const TYPE_LABEL: Record<Mission["type"], string> = {
   lagrange: "LAGRANGE",
   lunar: "LUNAR",
   deep: "DEEP SPACE",
+  mars: "MARS",
 };
 
 export function RightRail() {

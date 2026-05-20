@@ -1,11 +1,12 @@
 // Curated spacecraft asset catalog. Approximate positions for visualization only.
-// x/y are in canvas units relative to Earth (Earth at 0,0). Positive x toward Moon.
+// x/y are offsets in canvas units from the anchor body (default: Earth).
 export interface Mission {
   id: string;
   name: string;
   fullName: string;
-  type: "leo" | "lagrange" | "lunar" | "deep";
-  x: number; // px offset from Earth
+  type: "leo" | "lagrange" | "lunar" | "deep" | "mars";
+  anchor?: "earth" | "mars";
+  x: number;
   y: number;
   status: "active" | "planned";
   country: string;
@@ -16,7 +17,7 @@ export interface Mission {
   crew?: string;
   payload: string;
   mission: string;
-  orbit: string; // e.g. "≈408 km altitude (LEO)"
+  orbit: string;
   description: string;
 }
 
@@ -195,5 +196,151 @@ export const MISSIONS: Mission[] = [
     mission: "Crewed cislunar outpost supporting Artemis",
     orbit: "Near-Rectilinear Halo Orbit (NRHO) around the Moon",
     description: "A small, modular crewed station planned for the same NRHO that CAPSTONE is pathfinding. Gateway will serve as a staging point for crewed lunar-surface missions, host deep-space life-support and radiation-environment experiments, and provide a communications and rendezvous node for Human Landing Systems and international partner modules.",
+  },
+
+  // ── Mars assets (anchor: "mars", x/y offsets in svg units from Mars) ──
+  {
+    id: "perseverance",
+    name: "Perseverance",
+    fullName: "Mars 2020 Perseverance Rover",
+    type: "mars",
+    anchor: "mars",
+    x: -2, y: 38,
+    status: "active",
+    country: "USA",
+    flag: "🇺🇸",
+    agency: "NASA / JPL",
+    launched: "Jul 2020 · Landed Feb 2021",
+    mass: "1,025 kg",
+    payload: "Mastcam-Z, SuperCam, PIXL, SHERLOC, MOXIE, MEDA, RIMFAX, sample caching",
+    mission: "Astrobiology & sample caching in Jezero Crater",
+    orbit: "Surface — Jezero Crater (18.4°N, 77.5°E)",
+    description: "NASA's most capable rover, hunting for biosignatures in an ancient river delta. Perseverance caches drill cores in sealed tubes for retrieval by the joint NASA/ESA Mars Sample Return campaign. MOXIE has already demonstrated in-situ oxygen production from Martian CO₂.",
+  },
+  {
+    id: "curiosity",
+    name: "Curiosity",
+    fullName: "Mars Science Laboratory — Curiosity",
+    type: "mars",
+    anchor: "mars",
+    x: 6, y: 42,
+    status: "active",
+    country: "USA",
+    flag: "🇺🇸",
+    agency: "NASA / JPL",
+    launched: "Nov 2011 · Landed Aug 2012",
+    mass: "899 kg",
+    payload: "ChemCam, SAM, CheMin, MAHLI, APXS, REMS, RAD, DAN",
+    mission: "Habitability assessment in Gale Crater",
+    orbit: "Surface — Gale Crater, climbing Mount Sharp",
+    description: "Plutonium-powered rover that confirmed Gale Crater once hosted long-lived freshwater lakes habitable to microbial life. Continues to climb Mount Sharp, sampling stratigraphic layers that record Mars' transition from a wetter to a desiccated world.",
+  },
+  {
+    id: "mro",
+    name: "MRO",
+    fullName: "Mars Reconnaissance Orbiter",
+    type: "mars",
+    anchor: "mars",
+    x: 40, y: -28,
+    status: "active",
+    country: "USA",
+    flag: "🇺🇸",
+    agency: "NASA / JPL",
+    launched: "Aug 2005 · Mars orbit Mar 2006",
+    mass: "2,180 kg",
+    payload: "HiRISE, CTX, MARCI, CRISM, SHARAD, MCS",
+    mission: "High-resolution imaging & relay",
+    orbit: "Sun-synchronous polar orbit, ≈ 250 × 316 km",
+    description: "The workhorse Mars orbiter. HiRISE returns ~30 cm/pixel imagery used for landing-site selection and surface change detection, while SHARAD probes subsurface ice. MRO is also the primary UHF relay for surface assets including Perseverance and Curiosity.",
+  },
+  {
+    id: "maven",
+    name: "MAVEN",
+    fullName: "Mars Atmosphere and Volatile EvolutioN",
+    type: "mars",
+    anchor: "mars",
+    x: -42, y: -22,
+    status: "active",
+    country: "USA",
+    flag: "🇺🇸",
+    agency: "NASA / LASP",
+    launched: "Nov 2013 · Mars orbit Sep 2014",
+    mass: "2,454 kg",
+    payload: "NGIMS, IUVS, SWEA, SWIA, STATIC, SEP, MAG, LPW",
+    mission: "Upper atmosphere & escape-to-space studies",
+    orbit: "Elliptical, ≈ 150 × 6,200 km",
+    description: "Quantifies how solar wind and EUV radiation strip Mars' atmosphere into space — the leading explanation for its loss of surface water. Also serves as a secondary UHF relay for surface assets.",
+  },
+  {
+    id: "mars-express",
+    name: "Mars Express",
+    fullName: "Mars Express Orbiter",
+    type: "mars",
+    anchor: "mars",
+    x: -38, y: 30,
+    status: "active",
+    country: "Europe",
+    flag: "🇪🇺",
+    agency: "ESA",
+    launched: "Jun 2003 · Mars orbit Dec 2003",
+    mass: "1,123 kg",
+    payload: "HRSC, OMEGA, MARSIS, PFS, SPICAM, ASPERA-3, MaRS",
+    mission: "Geology, mineralogy & atmosphere",
+    orbit: "Highly elliptical polar, ≈ 298 × 10,107 km",
+    description: "ESA's first interplanetary mission. MARSIS detected liquid-water lakes beneath the south polar ice cap; HRSC has produced near-global color stereo topography. Still operating after 20+ years.",
+  },
+  {
+    id: "tgo",
+    name: "TGO",
+    fullName: "ExoMars Trace Gas Orbiter",
+    type: "mars",
+    anchor: "mars",
+    x: 44, y: 24,
+    status: "active",
+    country: "Europe · Russia",
+    flag: "🇪🇺",
+    agency: "ESA · Roscosmos",
+    launched: "Mar 2016 · Mars orbit Oct 2016",
+    mass: "3,755 kg",
+    payload: "NOMAD, ACS, CaSSIS, FREND",
+    mission: "Trace-gas inventory & subsurface hydrogen",
+    orbit: "Circular, ≈ 400 km altitude",
+    description: "Searches for methane and other trace gases that could hint at biological or geological activity. FREND maps subsurface hydrogen (water-ice) reserves at improved resolution and serves as a high-bandwidth relay for surface missions.",
+  },
+  {
+    id: "hope",
+    name: "Hope",
+    fullName: "Emirates Mars Mission — Al-Amal (Hope)",
+    type: "mars",
+    anchor: "mars",
+    x: -48, y: 6,
+    status: "active",
+    country: "UAE",
+    flag: "🇦🇪",
+    agency: "MBRSC",
+    launched: "Jul 2020 · Mars orbit Feb 2021",
+    mass: "1,350 kg",
+    payload: "EXI imager, EMIRS IR spectrometer, EMUS UV spectrometer",
+    mission: "Global Martian weather & atmospheric loss",
+    orbit: "High elliptical, ≈ 20,000 × 43,000 km",
+    description: "The Arab world's first interplanetary mission. Its high, slow orbit gives the first near-global, diurnal picture of Mars' weather and links lower-atmosphere dynamics to upper-atmosphere escape.",
+  },
+  {
+    id: "tianwen-1",
+    name: "Tianwen-1",
+    fullName: "Tianwen-1 Orbiter",
+    type: "mars",
+    anchor: "mars",
+    x: 36, y: 38,
+    status: "active",
+    country: "China",
+    flag: "🇨🇳",
+    agency: "CNSA",
+    launched: "Jul 2020 · Mars orbit Feb 2021",
+    mass: "≈ 3,175 kg (orbiter)",
+    payload: "MoRIC, HiRIC, MOMAG, MINPA, MEPA, MOSIR, MMS",
+    mission: "Orbital remote sensing & rover relay",
+    orbit: "Polar elliptical, ≈ 265 × 12,000 km",
+    description: "China's first independent Mars mission. The orbiter continues global remote sensing and previously relayed data from the Zhurong rover, which has been dormant since mid-2022 after exceeding its design lifetime.",
   },
 ];

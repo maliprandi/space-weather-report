@@ -4,14 +4,20 @@ import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS } from "@/data/missions";
 import type { DashEvent } from "@/lib/nasa";
 import earthImg from "@/assets/earth.png";
+import moonImg from "@/assets/moon.png";
+import sunImg from "@/assets/sun.png";
+import marsImg from "@/assets/mars.png";
 
-const W = 1600;
+const W = 1900;
 const H = 900;
 const SUN_X = 200;
 const SUN_Y = H / 2;
 const EARTH_X = 1100;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
+// Mars: 1.524 AU. 1 AU = (EARTH_X - SUN_X) = 900 svg units.
+const MARS_X = SUN_X + Math.round(900 * 1.524); // ≈ 1572
+const MARS_Y = H / 2;
 // Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
 const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
 
@@ -183,8 +189,8 @@ export function SpaceCanvas() {
         <g transform={`translate(${tx} ${ty}) scale(${scale})`}>
           <Starfield />
 
-          {/* Sun ecliptic line */}
-          <line x1={SUN_X} y1={SUN_Y} x2={EARTH_X} y2={EARTH_Y} stroke="#1f2937" strokeDasharray="3 6" strokeWidth={1} />
+          {/* Ecliptic line Sun → Earth → Mars */}
+          <line x1={SUN_X} y1={SUN_Y} x2={MARS_X} y2={MARS_Y} stroke="#1f2937" strokeDasharray="3 6" strokeWidth={1} />
 
           {/* SUN */}
           <g>
@@ -194,9 +200,15 @@ export function SpaceCanvas() {
                 <animate attributeName="opacity" values="0.15;0.4;0.15" dur="3s" repeatCount="indefinite" />
               </circle>
             )}
-            <circle cx={SUN_X} cy={SUN_Y} r={140} fill="url(#sunGrad)" opacity={0.55} />
-            <circle cx={SUN_X} cy={SUN_Y} r={68} fill="url(#sunCore)" />
-            <text x={SUN_X} y={SUN_Y + 110} textAnchor="middle" fill="#fbbf24" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>SUN</text>
+            <image
+              href={sunImg}
+              x={SUN_X - 130}
+              y={SUN_Y - 130}
+              width={260}
+              height={260}
+              style={{ filter: "drop-shadow(0 0 40px rgba(251,191,36,0.55))" }}
+            />
+            <text x={SUN_X} y={SUN_Y + 150} textAnchor="middle" fill="#fbbf24" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>SUN</text>
           </g>
 
           {/* CMEs */}
@@ -267,8 +279,29 @@ export function SpaceCanvas() {
 
             {/* Moon orbit */}
             <circle cx={EARTH_X} cy={EARTH_Y} r={MOON_OFFSET} fill="none" stroke="#1e293b" strokeDasharray="2 4" />
-            <circle cx={EARTH_X + MOON_OFFSET} cy={EARTH_Y} r={14} fill="#94a3b8" />
+            <image
+              href={moonImg}
+              x={EARTH_X + MOON_OFFSET - 16}
+              y={EARTH_Y - 16}
+              width={32}
+              height={32}
+              style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
+            />
             <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
+          </g>
+
+          {/* MARS */}
+          <g>
+            <image
+              href={marsImg}
+              x={MARS_X - 36}
+              y={MARS_Y - 36}
+              width={72}
+              height={72}
+              style={{ filter: "drop-shadow(0 0 10px rgba(234,88,12,0.4))" }}
+            />
+            <text x={MARS_X} y={MARS_Y + 56} textAnchor="middle" fill="#fb923c" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>MARS</text>
+            <text x={MARS_X} y={MARS_Y + 70} textAnchor="middle" fill="#7c2d12" fontSize={8} fontFamily="ui-monospace,monospace">1.524 AU</text>
           </g>
 
           {/* Lagrange points */}
@@ -284,10 +317,12 @@ export function SpaceCanvas() {
             MISSIONS.map((m) => {
               const active = selectedMissionId === m.id;
               const color = m.status === "planned" ? "transparent" : "#22d3ee";
+              const ax = m.anchor === "mars" ? MARS_X : EARTH_X;
+              const ay = m.anchor === "mars" ? MARS_Y : EARTH_Y;
               return (
                 <g
                   key={m.id}
-                  transform={`translate(${EARTH_X + m.x} ${EARTH_Y + m.y})`}
+                  transform={`translate(${ax + m.x} ${ay + m.y})`}
                   onClick={(e) => { e.stopPropagation(); selectMission(active ? null : m.id); }}
                   className="cursor-pointer"
                 >
