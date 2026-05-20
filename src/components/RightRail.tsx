@@ -95,21 +95,13 @@ export function RightRail() {
         )}
 
         {/* Selected event */}
-        <div className="border-b border-cyan-950/60 px-4 py-3">
-          <div className="mb-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-slate-500">
-            <span>SELECTED EVENT</span>
-            {selected && (
+        {selected && (
+          <div className="border-b border-cyan-950/60 px-4 py-3">
+            <div className="mb-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-slate-500">
+              <span>SELECTED EVENT</span>
               <button onClick={() => select(null)} className="text-slate-600 hover:text-slate-300">CLEAR ✕</button>
-            )}
-          </div>
-
-          {!selected && (
-            <div className="border border-dashed border-slate-800 px-3 py-4 text-center text-slate-600">
-              Click an event node on the chart or timeline.
             </div>
-          )}
 
-          {selected && (
             <div className="space-y-3">
               <div>
                 <div className="text-[10px] tracking-[0.2em] text-slate-500">{selected.type.toUpperCase()}</div>
@@ -149,8 +141,8 @@ export function RightRail() {
                 </pre>
               </details>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Spacecraft assets */}
         <div className="px-4 py-3">

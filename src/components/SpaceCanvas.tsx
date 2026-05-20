@@ -307,13 +307,30 @@ export function SpaceCanvas() {
             {layers.vanAllen && (
               <g>
                 {[
-                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER" },
-                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER" },
+                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER", labelY: 16 },
+                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER", labelY: 32 },
                 ].map((b) => (
-                  <g key={b.id} onClick={(e) => { e.stopPropagation(); selectInfo(b.id); }} className="cursor-pointer">
-                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#c4b5fd" strokeWidth={b.w} opacity={0.28} />
-                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#a78bfa" strokeWidth={0.6} opacity={0.7} strokeDasharray="2 3" />
-                    <text x={EARTH_X + b.r + b.w / 2 + 4} y={EARTH_Y + 3} fill="#c4b5fd" fontSize={8} fontFamily="ui-monospace,monospace" letterSpacing={2}>
+                  <g
+                    key={b.id}
+                    onClick={(e) => { e.stopPropagation(); selectInfo(b.id); }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <circle
+                      cx={EARTH_X} cy={EARTH_Y} r={b.r}
+                      fill="none" stroke="#c4b5fd" strokeWidth={b.w} opacity={0.28}
+                      pointerEvents="stroke"
+                    />
+                    <circle
+                      cx={EARTH_X} cy={EARTH_Y} r={b.r}
+                      fill="none" stroke="#a78bfa" strokeWidth={0.6} opacity={0.7}
+                      strokeDasharray="2 3" pointerEvents="none"
+                    />
+                    <text
+                      x={EARTH_X - b.r - 6} y={EARTH_Y + b.labelY}
+                      textAnchor="end" fill="#c4b5fd" fontSize={8}
+                      fontFamily="ui-monospace,monospace" letterSpacing={2}
+                      pointerEvents="none"
+                    >
                       VAN ALLEN · {b.label}
                     </text>
                   </g>
