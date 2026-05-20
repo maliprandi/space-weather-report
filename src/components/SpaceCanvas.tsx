@@ -471,13 +471,13 @@ export function SpaceCanvas() {
       {/* Zoom controls */}
       <div className="absolute bottom-4 left-4 flex gap-1 font-mono text-xs">
         <button
-          onClick={() => setScale((s) => Math.min(3, s + 0.2))}
+          onClick={() => zoomAtCenter(scale * 1.25)}
           className="border border-cyan-900 bg-black/60 px-2 py-1 text-cyan-300 hover:bg-cyan-950"
         >
           +
         </button>
         <button
-          onClick={() => setScale((s) => Math.max(0.5, s - 0.2))}
+          onClick={() => zoomAtCenter(scale / 1.25)}
           className="border border-cyan-900 bg-black/60 px-2 py-1 text-cyan-300 hover:bg-cyan-950"
         >
           −
