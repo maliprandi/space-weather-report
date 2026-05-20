@@ -49,8 +49,8 @@ function eventActive(ev: DashEvent, cursor: number): { active: boolean; progress
     const active = cursor >= ev.time - 6 * 3600_000 && cursor <= ev.time + 36 * 3600_000;
     return { active, progress: 0 };
   }
-  // neo
-  const active = cursor >= ev.time - 6 * 3600_000 && cursor <= ev.time + 6 * 3600_000;
+  // neo — visible for a generous window around close approach so they're easy to spot
+  const active = cursor >= ev.time - 3 * 24 * 3600_000 && cursor <= ev.time + 3 * 24 * 3600_000;
   return { active, progress: 0 };
 }
 
