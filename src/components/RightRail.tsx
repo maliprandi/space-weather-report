@@ -30,11 +30,17 @@ export function RightRail() {
   const selectedInfo = selectedInfoId ? INFO_CARDS[selectedInfoId] : undefined;
 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (selectedMissionId && cardRefs.current[selectedMissionId]) {
       cardRefs.current[selectedMissionId]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [selectedMissionId]);
+  useEffect(() => {
+    if ((selectedId || selectedInfoId) && scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedId, selectedInfoId]);
 
   return (
     <aside className="flex h-full w-[380px] shrink-0 flex-col border-l border-cyan-950/60 bg-[#070b14] font-mono text-[11px] text-slate-300">
@@ -70,7 +76,7 @@ export function RightRail() {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
         {/* Selected info overlay (Van Allen, etc.) */}
         {selectedInfo && (
           <div className="border-b border-purple-900/60 bg-purple-950/10 px-4 py-3">
