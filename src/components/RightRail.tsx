@@ -2,6 +2,7 @@ import { useDash, type LayerKey } from "@/state/dashboard";
 import { THREAT_COLOR, THREAT_LABEL } from "@/lib/threat";
 import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS, type Mission } from "@/data/missions";
+import { INFO_CARDS } from "@/data/infoCards";
 import { useEffect, useMemo, useRef } from "react";
 
 const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[] = [
@@ -10,6 +11,7 @@ const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[
   { key: "gst", label: "Geomagnetic Storms", color: TYPE_COLOR.gst, hint: "NASA DONKI · GST" },
   { key: "neo", label: "Near-Earth Objects", color: TYPE_COLOR.neo, hint: "NASA NeoWs feed" },
   { key: "orbits", label: "Earth Orbital Zones", color: "#64748b", hint: "LEO · MEO · GEO · HEO" },
+  { key: "vanAllen", label: "Van Allen Belts", color: "#c4b5fd", hint: "Inner & outer radiation belts" },
   { key: "missions", label: "Spacecraft Assets", color: "#22d3ee", hint: "Curated catalog" },
 ];
 
