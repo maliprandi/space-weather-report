@@ -85,9 +85,7 @@ const Starfield = () => {
 
 export function SpaceCanvas() {
   const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission, selectInfo } = useDash();
-  const [tx, setTx] = useState(0);
-  const [ty, setTy] = useState(0);
-  const [scale, setScale] = useState(1);
+  const [{ tx, ty, scale }, setView] = useState({ tx: 0, ty: 0, scale: 1 });
   const dragging = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,13 +102,16 @@ export function SpaceCanvas() {
   }, []);
 
   // Zoom anchored at a given SVG-space point: keep that point fixed under the cursor.
-  const zoomAt = (svgX: number, svgY: number, newScaleRaw: number) => {
-    const newScale = Math.min(3, Math.max(0.5, newScaleRaw));
-    setScale((s) => {
-      // Solve: svgX = newTx + worldX * newScale, where worldX = (svgX - tx) / s
-      setTx((t) => svgX - ((svgX - t) / s) * newScale);
-      setTy((t) => svgY - ((svgY - t) / s) * newScale);
-      return newScale;
+  const zoomAt = (svgX: number, svgY: number, factor: number) => {
+    setView((view) => {
+      const newScale = Math.min(3, Math.max(0.5, view.scale * factor));
+      const worldX = (svgX - view.tx) / view.scale;
+      const worldY = (svgY - view.ty) / view.scale;
+      return {
+        scale: newScale,
+        tx: svgX - worldX * newScale,
+        ty: svgY - worldY * newScale,
+      };
     });
   };
 
