@@ -237,9 +237,9 @@ export function SpaceCanvas() {
           <line x1={SUN_X} y1={SUN_Y} x2={MARS_X} y2={MARS_Y} stroke="#1f2937" strokeDasharray="3 6" strokeWidth={1} />
 
           {/* SUN */}
-          <g>
+          <g onClick={(e) => { e.stopPropagation(); selectInfo("sun"); }} style={{ cursor: "pointer" }}>
             {flareGlowColor && (
-              <circle cx={SUN_X} cy={SUN_Y} r={180} fill={flareGlowColor} opacity={0.25}>
+              <circle cx={SUN_X} cy={SUN_Y} r={180} fill={flareGlowColor} opacity={0.25} pointerEvents="none">
                 <animate attributeName="r" values="160;220;160" dur="3s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.15;0.4;0.15" dur="3s" repeatCount="indefinite" />
               </circle>
