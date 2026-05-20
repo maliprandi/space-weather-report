@@ -280,16 +280,18 @@ export function SpaceCanvas() {
               </circle>
             )}
 
-            <image
-              href={earthImg}
-              x={EARTH_X - 52}
-              y={EARTH_Y - 52}
-              width={104}
-              height={104}
-              style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
-            />
-            <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
-            <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+            <g onClick={(e) => { e.stopPropagation(); selectInfo("earth"); }} style={{ cursor: "pointer" }}>
+              <image
+                href={earthImg}
+                x={EARTH_X - 52}
+                y={EARTH_Y - 52}
+                width={104}
+                height={104}
+                style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
+              />
+              <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
+              <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+            </g>
 
             {/* Van Allen radiation belts */}
             {layers.vanAllen && (
