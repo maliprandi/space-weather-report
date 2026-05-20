@@ -281,8 +281,8 @@ export function SpaceCanvas() {
             {layers.vanAllen && (
               <g>
                 {[
-                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER", labelY: 16 },
-                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER", labelY: 32 },
+                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER", labelY: -28, labelX: -54 },
+                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER", labelY: -44, labelX: -78 },
                 ].map((b) => (
                   <g
                     key={b.id}
