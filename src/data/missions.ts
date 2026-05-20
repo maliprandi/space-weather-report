@@ -313,7 +313,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Emirates Mars Mission — Al-Amal (Hope)",
     type: "mars",
     anchor: "mars",
-    x: -48, y: 6,
+    x: -90, y: 4,
     status: "active",
     country: "UAE",
     flag: "🇦🇪",
