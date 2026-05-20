@@ -42,6 +42,21 @@ function Index() {
     return () => { cancelled = true; };
   }, [setEvents, setLoading, setError, setWindow]);
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== "Space") return;
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || t?.isContentEditable) return;
+      e.preventDefault();
+      const s = useDash.getState();
+      s.setPlaying(!s.playing);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+
   return (
     <div className="dark flex h-screen w-screen flex-col overflow-hidden bg-[#05070d] text-slate-100">
       <TopBar />
