@@ -24,9 +24,10 @@ const TYPE_LABEL: Record<Mission["type"], string> = {
 };
 
 export function RightRail() {
-  const { layers, toggleLayer, events, selectedId, select, selectedMissionId, selectMission } = useDash();
+  const { layers, toggleLayer, events, selectedId, select, selectedMissionId, selectMission, selectedInfoId, selectInfo } = useDash();
   const selected = useMemo(() => events.find((e) => e.id === selectedId), [events, selectedId]);
   const selectedMission = useMemo(() => MISSIONS.find((m) => m.id === selectedMissionId), [selectedMissionId]);
+  const selectedInfo = selectedInfoId ? INFO_CARDS[selectedInfoId] : undefined;
 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   useEffect(() => {
