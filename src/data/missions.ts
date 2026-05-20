@@ -241,7 +241,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Mars Reconnaissance Orbiter",
     type: "mars",
     anchor: "mars",
-    x: 40, y: -28,
+    x: 41, y: -41,
     status: "active",
     country: "USA",
     flag: "🇺🇸",
