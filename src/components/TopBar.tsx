@@ -3,7 +3,7 @@ import { useDash } from "@/state/dashboard";
 import { TYPE_COLOR } from "@/lib/eventColors";
 
 export function TopBar() {
-  const { events, loading, error, windowStart, windowEnd, playing } = useDash();
+  const { events, loading, error, playing } = useDash();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
