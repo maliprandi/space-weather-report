@@ -17,7 +17,6 @@ An operational dashboard that visualizes the Sun, Earth, near-Earth space, and c
 |                                                     |  [x] CMEs      |
 |     (event halos, directional arrows, color nodes)  |  [x] Geomag    |
 |                                                     |  [x] Asteroids |
-|                                                     |  [ ] EPIC disk |
 |                                                     |  [x] Missions  |
 |                                                     |                |
 |                                                     |  Selected      |
