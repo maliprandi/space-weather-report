@@ -319,8 +319,8 @@ export function SpaceCanvas() {
               const color = m.status === "planned" ? "transparent" : "#22d3ee";
               const ax = m.anchor === "mars" ? MARS_X : EARTH_X;
               const ay = m.anchor === "mars" ? MARS_Y : EARTH_Y;
-              // Inverse-scale markers so they shrink relative to planets when zoomed in.
-              const inv = 1 / Math.max(0.5, Math.min(scale, 2.5));
+              // Inverse-scale markers (mildly) so they shrink relative to planets when zoomed in.
+              const inv = 1 / Math.sqrt(Math.max(0.5, Math.min(scale, 3)));
               return (
                 <g
                   key={m.id}
@@ -328,14 +328,14 @@ export function SpaceCanvas() {
                   onClick={(e) => { e.stopPropagation(); selectMission(active ? null : m.id); }}
                   className="cursor-pointer"
                 >
-                  <rect x={-3.5} y={-3.5} width={7} height={7} fill={color} stroke="#22d3ee" strokeWidth={active ? 1.5 : 0.8} />
+                  <rect x={-5} y={-5} width={10} height={10} fill={color} stroke="#22d3ee" strokeWidth={active ? 1.8 : 1} />
                   {active && (
-                    <circle cx={0} cy={0} r={10} fill="none" stroke="#22d3ee" strokeWidth={1} opacity={0.6}>
-                      <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite" />
+                    <circle cx={0} cy={0} r={12} fill="none" stroke="#22d3ee" strokeWidth={1} opacity={0.6}>
+                      <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite" />
                       <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite" />
                     </circle>
                   )}
-                  <text x={6} y={3} fill={active ? "#e0f2fe" : "#94a3b8"} fontSize={8} fontFamily="ui-monospace,monospace">
+                  <text x={8} y={3} fill={active ? "#e0f2fe" : "#94a3b8"} fontSize={9} fontFamily="ui-monospace,monospace">
                     {m.name}
                   </text>
                 </g>
