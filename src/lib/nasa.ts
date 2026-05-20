@@ -167,6 +167,11 @@ export function normalizeNeos(neo: { near_earth_objects: Record<string, any[]> }
       const missLD = missKm / LD_KM;
       const velocity = parseFloat(ca.relative_velocity?.kilometers_per_second ?? "0");
       const hazardous = !!n.is_potentially_hazardous_asteroid;
+      // Stable hash → spread NEOs evenly around Earth (0–360°)
+      let h = 0;
+      const s = String(n.id ?? n.name ?? "");
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      const angleDeg = (((h % 360) + 360) % 360);
       out.push({
         id: `neo-${n.id}-${t}`,
         type: "neo",
@@ -182,7 +187,9 @@ export function normalizeNeos(neo: { near_earth_objects: Record<string, any[]> }
           ["Magnitude", String(n.absolute_magnitude_h ?? "—")],
         ],
         raw: n,
-        angleDeg: ((n.id?.length ?? 0) % 60) - 30,
+        angleDeg,
+        missLD,
+        diameter,
       });
     }
   }
