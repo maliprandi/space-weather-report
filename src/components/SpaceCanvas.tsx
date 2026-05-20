@@ -4,14 +4,20 @@ import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS } from "@/data/missions";
 import type { DashEvent } from "@/lib/nasa";
 import earthImg from "@/assets/earth.png";
+import moonImg from "@/assets/moon.png";
+import sunImg from "@/assets/sun.png";
+import marsImg from "@/assets/mars.png";
 
-const W = 1600;
+const W = 1900;
 const H = 900;
 const SUN_X = 200;
 const SUN_Y = H / 2;
 const EARTH_X = 1100;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
+// Mars: 1.524 AU. 1 AU = (EARTH_X - SUN_X) = 900 svg units.
+const MARS_X = SUN_X + Math.round(900 * 1.524); // ≈ 1572
+const MARS_Y = H / 2;
 // Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
 const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
 
