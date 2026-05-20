@@ -146,12 +146,14 @@ export function SpaceCanvas() {
   }, [scale, tx, ty]);
 
   const onMouseDown = (e: React.MouseEvent) => {
-    dragging.current = { x: e.clientX - tx, y: e.clientY - ty };
+    const p = clientToSvg(e.clientX, e.clientY);
+    dragging.current = { x: p.x - tx, y: p.y - ty };
   };
   const onMouseMove = (e: React.MouseEvent) => {
     if (!dragging.current) return;
-    setTx(e.clientX - dragging.current.x);
-    setTy(e.clientY - dragging.current.y);
+    const p = clientToSvg(e.clientX, e.clientY);
+    setTx(p.x - dragging.current.x);
+    setTy(p.y - dragging.current.y);
   };
   const onMouseUp = () => {
     dragging.current = null;
