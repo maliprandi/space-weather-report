@@ -6,7 +6,7 @@ Live NASA data is rendered in a cinematic 2.5D tactical view with interactive ti
 
 ## Live Demo
 
-🌐 [Space Weather Dashboard](https://space-weather-report.lovable.app?utm_source=chatgpt.com)
+🌐 [Space Weather Dashboard](https://space-weather-dashboard.lovable.app?utm_source=chatgpt.com)
 
 ---
 
