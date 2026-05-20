@@ -1,6 +1,6 @@
-# Cislunar Space Weather Dashboard — Plan
+# Space Weather Dashboard — Plan
 
-A Palantir-style operational dashboard that visualizes the Sun, Earth, near-Earth space, and cislunar space in a stylized 2.5D top-down view, overlaying live NASA event data with a scrubbable 30-day timeline.
+An operational dashboard that visualizes the Sun, Earth, near-Earth space, and cislunar space in a stylized 2.5D top-down view, overlaying live NASA event data with a scrubbable 30-day timeline.
 
 ## Layout
 
