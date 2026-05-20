@@ -347,6 +347,27 @@ export function SpaceCanvas() {
           RESET VIEW
         </button>
       </div>
+
+      {/* Distance scale */}
+      <div className="pointer-events-none absolute bottom-4 right-4 font-mono text-[10px] text-slate-300">
+        <div className="mb-1 text-right tracking-widest text-slate-500">SCALE</div>
+        <div className="flex items-end gap-2">
+          <div className="flex flex-col items-start">
+            <div
+              className="relative h-2 border-x border-b border-slate-300"
+              style={{ width: `${scaleBarPx}px` }}
+            >
+              <div className="absolute left-1/2 top-0 h-2 w-px bg-slate-300" />
+            </div>
+            <div className="mt-1 text-slate-300" style={{ width: `${scaleBarPx}px`, textAlign: "center" }}>
+              {formatKm(niceKm)}
+            </div>
+          </div>
+        </div>
+        <div className="mt-1 text-right text-[9px] text-slate-600">
+          Sun→Earth 149.6M km · Earth→Moon 384k km
+        </div>
+      </div>
     </div>
   );
 }
