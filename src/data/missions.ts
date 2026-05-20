@@ -223,7 +223,7 @@ export const MISSIONS: Mission[] = [
     fullName: "Mars Science Laboratory — Curiosity",
     type: "mars",
     anchor: "mars",
-    x: 6, y: 42,
+    x: 14, y: 38,
     status: "active",
     country: "USA",
     flag: "🇺🇸",
