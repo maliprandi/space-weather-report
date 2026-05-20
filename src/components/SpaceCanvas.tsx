@@ -260,12 +260,25 @@ export function SpaceCanvas() {
 
           {/* EARTH */}
           <g>
+            {flareGlowColor && (
+              <>
+                <circle cx={EARTH_X} cy={EARTH_Y} r={60} fill={flareGlowColor} opacity={0.35}>
+                  <animate attributeName="r" values="50;180;50" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.55;0;0.55" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx={EARTH_X} cy={EARTH_Y} r={60} fill="none" stroke={flareGlowColor} strokeWidth={2} opacity={0.8}>
+                  <animate attributeName="r" values="55;140;55" dur="2s" begin="0.4s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.9;0;0.9" dur="2s" begin="0.4s" repeatCount="indefinite" />
+                </circle>
+              </>
+            )}
             {gstGlowColor && (
               <circle cx={EARTH_X} cy={EARTH_Y} r={70} fill="none" stroke={gstGlowColor} strokeWidth={3} opacity={0.6}>
                 <animate attributeName="r" values="60;90;60" dur="3s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite" />
               </circle>
             )}
+
             <image
               href={earthImg}
               x={EARTH_X - 52}
