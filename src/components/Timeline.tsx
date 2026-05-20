@@ -85,57 +85,89 @@ export function Timeline() {
       </div>
 
       <div className="px-4 py-3">
-        <div
-          ref={trackRef}
-          onClick={onScrub}
-          className="relative h-14 cursor-pointer rounded-sm border border-slate-900 bg-gradient-to-b from-[#0a1422] to-[#040813]"
-        >
-          {/* Day grid */}
-          {Array.from({ length: 31 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute top-0 h-full border-l border-slate-900"
-              style={{ left: `${(i / 30) * 100}%` }}
-            />
-          ))}
-
-          {/* Event dots */}
-          {events.map((ev) => {
-            const p = (ev.time - windowStart) / (windowEnd - windowStart);
-            if (p < 0 || p > 1) return null;
-            const row = { flare: 0.2, cme: 0.4, gst: 0.6, neo: 0.8 }[ev.type];
-            return (
-              <button
-                key={ev.id}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  select(ev.id);
-                  setCursor(ev.time);
-                }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition hover:scale-150"
-                style={{
-                  left: `${p * 100}%`,
-                  top: `${row * 100}%`,
-                  width: selectedId === ev.id ? 12 : 7,
-                  height: selectedId === ev.id ? 12 : 7,
-                  background: TYPE_COLOR[ev.type],
-                  boxShadow: `0 0 6px ${TYPE_COLOR[ev.type]}`,
-                }}
-                title={`${ev.title} — ${new Date(ev.time).toISOString().slice(0, 16)}`}
-              />
-            );
-          })}
-
-          {/* Cursor */}
-          <div
-            className="pointer-events-none absolute top-0 h-full w-px bg-cyan-300"
-            style={{ left: `${pct}%`, boxShadow: "0 0 8px #22d3ee" }}
-          >
-            <div className="absolute -left-1 -top-1 h-2 w-2 rotate-45 bg-cyan-300" />
+        <div className="flex gap-2">
+          {/* Y-axis: event-type labels stacked vertically, aligned to rows */}
+          <div className="relative h-14 w-12 shrink-0 text-[9px] tracking-widest text-slate-500">
+            {(["flare", "cme", "gst", "neo"] as const).map((t, i) => (
+              <div
+                key={t}
+                className="absolute right-0 -translate-y-1/2 pr-1 text-right"
+                style={{ top: `${[0.2, 0.4, 0.6, 0.8][i] * 100}%`, color: TYPE_COLOR[t] }}
+              >
+                {t.toUpperCase()}
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="mt-1 flex justify-between text-[9px] tracking-widest text-slate-600">
-          <span>FLARE</span><span>CME</span><span>GST</span><span>NEO</span>
+
+          <div className="flex-1">
+            <div
+              ref={trackRef}
+              onClick={onScrub}
+              className="relative h-14 cursor-pointer rounded-sm border border-slate-900 bg-gradient-to-b from-[#0a1422] to-[#040813]"
+            >
+              {/* Day grid */}
+              {Array.from({ length: 31 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute top-0 h-full border-l border-slate-900"
+                  style={{ left: `${(i / 30) * 100}%` }}
+                />
+              ))}
+
+              {/* Event dots */}
+              {events.map((ev) => {
+                const p = (ev.time - windowStart) / (windowEnd - windowStart);
+                if (p < 0 || p > 1) return null;
+                const row = { flare: 0.2, cme: 0.4, gst: 0.6, neo: 0.8 }[ev.type];
+                return (
+                  <button
+                    key={ev.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      select(ev.id);
+                      setCursor(ev.time);
+                    }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition hover:scale-150"
+                    style={{
+                      left: `${p * 100}%`,
+                      top: `${row * 100}%`,
+                      width: selectedId === ev.id ? 12 : 7,
+                      height: selectedId === ev.id ? 12 : 7,
+                      background: TYPE_COLOR[ev.type],
+                      boxShadow: `0 0 6px ${TYPE_COLOR[ev.type]}`,
+                    }}
+                    title={`${ev.title} — ${new Date(ev.time).toISOString().slice(0, 16)}`}
+                  />
+                );
+              })}
+
+              {/* Cursor */}
+              <div
+                className="pointer-events-none absolute top-0 h-full w-px bg-cyan-300"
+                style={{ left: `${pct}%`, boxShadow: "0 0 8px #22d3ee" }}
+              >
+                <div className="absolute -left-1 -top-1 h-2 w-2 rotate-45 bg-cyan-300" />
+              </div>
+            </div>
+
+            {/* X-axis: date markers */}
+            <div className="relative mt-1 h-3 text-[9px] tracking-widest text-slate-500">
+              {Array.from({ length: 7 }).map((_, i) => {
+                const p = i / 6;
+                const t = windowStart + p * (windowEnd - windowStart);
+                const label = new Date(t).toISOString().slice(5, 10).replace("-", "/");
+                return (
+                  <div
+                    key={i}
+                    className="absolute -translate-x-1/2"
+                    style={{ left: `${p * 100}%` }}
+                  >
+                    {label}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>
