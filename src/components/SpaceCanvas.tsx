@@ -258,6 +258,25 @@ export function SpaceCanvas() {
               style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
             />
             <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
+            <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+
+            {/* Van Allen radiation belts */}
+            {layers.vanAllen && (
+              <g>
+                {[
+                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER" },
+                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER" },
+                ].map((b) => (
+                  <g key={b.id} onClick={(e) => { e.stopPropagation(); selectInfo(b.id); }} className="cursor-pointer">
+                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#c4b5fd" strokeWidth={b.w} opacity={0.28} />
+                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#a78bfa" strokeWidth={0.6} opacity={0.7} strokeDasharray="2 3" />
+                    <text x={EARTH_X + b.r + b.w / 2 + 4} y={EARTH_Y + 3} fill="#c4b5fd" fontSize={8} fontFamily="ui-monospace,monospace" letterSpacing={2}>
+                      VAN ALLEN · {b.label}
+                    </text>
+                  </g>
+                ))}
+              </g>
+            )}
 
             {/* Earth orbital zones (stylized — not to scale) */}
             {layers.orbits && (
