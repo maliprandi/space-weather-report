@@ -237,9 +237,9 @@ export function SpaceCanvas() {
           <line x1={SUN_X} y1={SUN_Y} x2={MARS_X} y2={MARS_Y} stroke="#1f2937" strokeDasharray="3 6" strokeWidth={1} />
 
           {/* SUN */}
-          <g>
+          <g onClick={(e) => { e.stopPropagation(); selectInfo("sun"); }} style={{ cursor: "pointer" }}>
             {flareGlowColor && (
-              <circle cx={SUN_X} cy={SUN_Y} r={180} fill={flareGlowColor} opacity={0.25}>
+              <circle cx={SUN_X} cy={SUN_Y} r={180} fill={flareGlowColor} opacity={0.25} pointerEvents="none">
                 <animate attributeName="r" values="160;220;160" dur="3s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.15;0.4;0.15" dur="3s" repeatCount="indefinite" />
               </circle>
@@ -280,16 +280,18 @@ export function SpaceCanvas() {
               </circle>
             )}
 
-            <image
-              href={earthImg}
-              x={EARTH_X - 52}
-              y={EARTH_Y - 52}
-              width={104}
-              height={104}
-              style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
-            />
-            <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
-            <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+            <g onClick={(e) => { e.stopPropagation(); selectInfo("earth"); }} style={{ cursor: "pointer" }}>
+              <image
+                href={earthImg}
+                x={EARTH_X - 52}
+                y={EARTH_Y - 52}
+                width={104}
+                height={104}
+                style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
+              />
+              <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
+              <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+            </g>
 
             {/* Van Allen radiation belts */}
             {layers.vanAllen && (
@@ -347,20 +349,22 @@ export function SpaceCanvas() {
 
             {/* Moon orbit */}
             <circle cx={EARTH_X} cy={EARTH_Y} r={MOON_OFFSET} fill="none" stroke="#1e293b" strokeDasharray="2 4" />
-            <image
-              href={moonImg}
-              x={EARTH_X + MOON_OFFSET - 16}
-              y={EARTH_Y - 16}
-              width={32}
-              height={32}
-              style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
-            />
-            <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
-            <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 44} textAnchor="middle" fill="#475569" fontSize={7} fontFamily="ui-monospace,monospace">0.0026 AU</text>
+            <g onClick={(e) => { e.stopPropagation(); selectInfo("moon"); }} style={{ cursor: "pointer" }}>
+              <image
+                href={moonImg}
+                x={EARTH_X + MOON_OFFSET - 16}
+                y={EARTH_Y - 16}
+                width={32}
+                height={32}
+                style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
+              />
+              <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
+              <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 44} textAnchor="middle" fill="#475569" fontSize={7} fontFamily="ui-monospace,monospace">0.0026 AU</text>
+            </g>
           </g>
 
           {/* MARS */}
-          <g>
+          <g onClick={(e) => { e.stopPropagation(); selectInfo("mars"); }} style={{ cursor: "pointer" }}>
             <image
               href={marsImg}
               x={MARS_X - 36}
