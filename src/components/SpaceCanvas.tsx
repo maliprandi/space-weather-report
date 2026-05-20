@@ -364,7 +364,7 @@ export function SpaceCanvas() {
           </g>
 
           {/* MARS */}
-          <g>
+          <g onClick={(e) => { e.stopPropagation(); selectInfo("mars"); }} style={{ cursor: "pointer" }}>
             <image
               href={marsImg}
               x={MARS_X - 36}
