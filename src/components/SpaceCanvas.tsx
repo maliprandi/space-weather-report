@@ -369,8 +369,8 @@ export function SpaceCanvas() {
               height={72}
               style={{ filter: "drop-shadow(0 0 10px rgba(234,88,12,0.4))" }}
             />
-            <text x={MARS_X} y={MARS_Y + 56} textAnchor="middle" fill="#fb923c" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>MARS</text>
-            <text x={MARS_X} y={MARS_Y + 70} textAnchor="middle" fill="#7c2d12" fontSize={8} fontFamily="ui-monospace,monospace">1.524 AU</text>
+            <text x={MARS_X} y={MARS_Y + 96} textAnchor="middle" fill="#fb923c" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>MARS</text>
+            <text x={MARS_X} y={MARS_Y + 110} textAnchor="middle" fill="#7c2d12" fontSize={8} fontFamily="ui-monospace,monospace">1.524 AU</text>
           </g>
 
           {/* CMEs — rendered after planets so nodes stay on top and clickable */}
