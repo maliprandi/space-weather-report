@@ -411,8 +411,42 @@ export function SpaceCanvas() {
             );
           })}
 
+          {/* Solar flares — clickable bubbles around Earth (flare radiation reaches Earth) */}
+          {flares.map(({ ev }, i) => {
+            const color = TYPE_COLOR.flare;
+            const activeSel = selectedId === ev.id;
+            // Stable hash → spread bubbles around Earth
+            let h = 0;
+            const s = String(ev.id);
+            for (let k = 0; k < s.length; k++) h = (h * 31 + s.charCodeAt(k)) | 0;
+            const angle = ((((h % 360) + 360) % 360) * Math.PI) / 180;
+            const radius = 150 + ((Math.abs(h) >> 8) % 40);
+            const x = EARTH_X + Math.cos(angle) * radius;
+            const y = EARTH_Y + Math.sin(angle) * radius;
+            return (
+              <g key={ev.id} onClick={(e) => { e.stopPropagation(); select(ev.id); }} className="cursor-pointer">
+                <line x1={EARTH_X} y1={EARTH_Y} x2={x} y2={y} stroke={color} strokeWidth={1} opacity={0.35} strokeDasharray="2 3" pointerEvents="none" />
+                <circle cx={x} cy={y} r={activeSel ? 11 : 7} fill={color} opacity={0.9} stroke="#fff" strokeWidth={activeSel ? 1.5 : 0}>
+                  <animate attributeName="r" values={activeSel ? "10;14;10" : "6;10;6"} dur="1.6s" repeatCount="indefinite" />
+                </circle>
+                <circle cx={x} cy={y} r={14} fill="none" stroke={color} strokeWidth={1.2} opacity={0.6}>
+                  <animate attributeName="r" values="10;22;10" dur="1.6s" begin={`${(i % 5) * 0.2}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.7;0;0.7" dur="1.6s" begin={`${(i % 5) * 0.2}s`} repeatCount="indefinite" />
+                </circle>
+                {activeSel && (
+                  <circle cx={x} cy={y} r={18} fill="none" stroke={color} strokeWidth={1.5} opacity={0.7}>
+                    <animate attributeName="r" values="16;26;16" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.8;0.1;0.8" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                {/* invisible enlarged hit target */}
+                <circle cx={x} cy={y} r={18} fill="transparent" />
+              </g>
+            );
+          })}
 
           {/* Lagrange points */}
+
           <g fontFamily="ui-monospace,monospace" fontSize={9} fill="#64748b">
             <circle cx={EARTH_X - 120} cy={EARTH_Y} r={3} fill="#64748b" />
             <text x={EARTH_X - 120} y={EARTH_Y - 8} textAnchor="middle">L1</text>
