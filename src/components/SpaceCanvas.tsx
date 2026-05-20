@@ -273,14 +273,29 @@ export function SpaceCanvas() {
 
           {/* Missions */}
           {layers.missions &&
-            MISSIONS.map((m) => (
-              <g key={m.id} transform={`translate(${EARTH_X + m.x} ${EARTH_Y + m.y})`}>
-                <rect x={-4} y={-4} width={8} height={8} fill={m.status === "planned" ? "transparent" : "#22d3ee"} stroke="#22d3ee" strokeWidth={1} />
-                <text x={8} y={3} fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">
-                  {m.name}
-                </text>
-              </g>
-            ))}
+            MISSIONS.map((m) => {
+              const active = selectedMissionId === m.id;
+              const color = m.status === "planned" ? "transparent" : "#22d3ee";
+              return (
+                <g
+                  key={m.id}
+                  transform={`translate(${EARTH_X + m.x} ${EARTH_Y + m.y})`}
+                  onClick={(e) => { e.stopPropagation(); selectMission(active ? null : m.id); }}
+                  className="cursor-pointer"
+                >
+                  <rect x={-5} y={-5} width={10} height={10} fill={color} stroke="#22d3ee" strokeWidth={active ? 2 : 1} />
+                  {active && (
+                    <circle cx={0} cy={0} r={12} fill="none" stroke="#22d3ee" strokeWidth={1} opacity={0.6}>
+                      <animate attributeName="r" values="10;18;10" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                  <text x={8} y={3} fill={active ? "#e0f2fe" : "#94a3b8"} fontSize={9} fontFamily="ui-monospace,monospace">
+                    {m.name}
+                  </text>
+                </g>
+              );
+            })}
 
           {/* NEOs */}
           {neos.map(({ ev }) => {
