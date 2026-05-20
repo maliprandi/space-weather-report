@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDash } from "@/state/dashboard";
-import { THREAT_COLOR } from "@/lib/threat";
+import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS } from "@/data/missions";
 import type { DashEvent } from "@/lib/nasa";
 
@@ -11,6 +11,22 @@ const SUN_Y = H / 2;
 const EARTH_X = 1100;
 const EARTH_Y = H / 2;
 const MOON_OFFSET = 280;
+// Sun→Earth = 900 svg units = 1 AU = 149,597,871 km
+const KM_PER_UNIT = 149_597_871 / (EARTH_X - SUN_X);
+
+function niceRound(n: number): number {
+  const exp = Math.floor(Math.log10(n));
+  const base = n / Math.pow(10, exp);
+  const nice = base < 1.5 ? 1 : base < 3.5 ? 2 : base < 7.5 ? 5 : 10;
+  return nice * Math.pow(10, exp);
+}
+
+function formatKm(km: number): string {
+  if (km >= 1e6) return `${(km / 1e6).toFixed(km / 1e6 < 10 ? 1 : 0)} M km`;
+  if (km >= 1e3) return `${(km / 1e3).toFixed(0)} k km`;
+  return `${km.toFixed(0)} km`;
+}
+
 
 // Earth-Sun distance ≈ 150e6 km. CME travel: ms = (150e6 / speed) * 1000
 function cmeTravelMs(speedKms?: number) {
