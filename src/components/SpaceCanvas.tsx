@@ -251,8 +251,8 @@ export function SpaceCanvas() {
               height={260}
               style={{ filter: "drop-shadow(0 0 40px rgba(251,191,36,0.55))" }}
             />
-            <text x={SUN_X} y={SUN_Y + 150} textAnchor="middle" fill="#fbbf24" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>SUN</text>
-            <text x={SUN_X} y={SUN_Y + 164} textAnchor="middle" fill="#92400e" fontSize={8} fontFamily="ui-monospace,monospace">0 AU</text>
+            <text x={SUN_X} y={SUN_Y + 150} textAnchor="middle" fill="#fde68a" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3} style={{ filter: "drop-shadow(0 0 6px rgba(251,191,36,0.9))" }}>SUN</text>
+            <text x={SUN_X} y={SUN_Y + 164} textAnchor="middle" fill="#fbbf24" fontSize={8} fontFamily="ui-monospace,monospace" style={{ filter: "drop-shadow(0 0 4px rgba(251,191,36,0.7))" }}>0 AU</text>
           </g>
 
           {/* CMEs render order moved below — see after MARS */}
