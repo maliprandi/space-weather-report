@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { DashEvent, EventType } from "@/lib/nasa";
 
-export type LayerKey = EventType | "missions" | "orbits";
+export type LayerKey = EventType | "missions" | "orbits" | "vanAllen";
 
 interface DashState {
   events: DashEvent[];
@@ -27,6 +27,9 @@ interface DashState {
 
   selectedMissionId: string | null;
   selectMission: (id: string | null) => void;
+
+  selectedInfoId: string | null;
+  selectInfo: (id: string | null) => void;
 
 
   loading: boolean;
@@ -54,15 +57,18 @@ export const useDash = create<DashState>((set) => ({
   speed: 6 * 3600_000, // 6h sim per 1s real (will multiply by 16ms tick)
   setSpeed: (speed) => set({ speed }),
 
-  layers: { flare: true, cme: true, gst: true, neo: true, missions: true, orbits: true },
+  layers: { flare: true, cme: true, gst: true, neo: true, missions: true, orbits: true, vanAllen: false },
   toggleLayer: (k) =>
     set((s) => ({ layers: { ...s.layers, [k]: !s.layers[k] } })),
 
   selectedId: null,
-  select: (selectedId) => set({ selectedId, selectedMissionId: null }),
+  select: (selectedId) => set({ selectedId, selectedMissionId: null, selectedInfoId: null }),
 
   selectedMissionId: null,
-  selectMission: (selectedMissionId) => set({ selectedMissionId, selectedId: null }),
+  selectMission: (selectedMissionId) => set({ selectedMissionId, selectedId: null, selectedInfoId: null }),
+
+  selectedInfoId: null,
+  selectInfo: (selectedInfoId) => set({ selectedInfoId, selectedId: null, selectedMissionId: null }),
 
 
   loading: false,

@@ -84,7 +84,7 @@ const Starfield = () => {
 };
 
 export function SpaceCanvas() {
-  const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission } = useDash();
+  const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission, selectInfo } = useDash();
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
   const [scale, setScale] = useState(1);
@@ -209,6 +209,7 @@ export function SpaceCanvas() {
               style={{ filter: "drop-shadow(0 0 40px rgba(251,191,36,0.55))" }}
             />
             <text x={SUN_X} y={SUN_Y + 150} textAnchor="middle" fill="#fbbf24" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>SUN</text>
+            <text x={SUN_X} y={SUN_Y + 164} textAnchor="middle" fill="#92400e" fontSize={8} fontFamily="ui-monospace,monospace">0 AU</text>
           </g>
 
           {/* CMEs */}
@@ -257,6 +258,25 @@ export function SpaceCanvas() {
               style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.45))" }}
             />
             <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
+            <text x={EARTH_X} y={EARTH_Y + 86} textAnchor="middle" fill="#1e3a8a" fontSize={8} fontFamily="ui-monospace,monospace">1.000 AU</text>
+
+            {/* Van Allen radiation belts */}
+            {layers.vanAllen && (
+              <g>
+                {[
+                  { id: "van-allen-inner", r: 68, w: 10, label: "INNER" },
+                  { id: "van-allen-outer", r: 100, w: 22, label: "OUTER" },
+                ].map((b) => (
+                  <g key={b.id} onClick={(e) => { e.stopPropagation(); selectInfo(b.id); }} className="cursor-pointer">
+                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#c4b5fd" strokeWidth={b.w} opacity={0.28} />
+                    <circle cx={EARTH_X} cy={EARTH_Y} r={b.r} fill="none" stroke="#a78bfa" strokeWidth={0.6} opacity={0.7} strokeDasharray="2 3" />
+                    <text x={EARTH_X + b.r + b.w / 2 + 4} y={EARTH_Y + 3} fill="#c4b5fd" fontSize={8} fontFamily="ui-monospace,monospace" letterSpacing={2}>
+                      VAN ALLEN · {b.label}
+                    </text>
+                  </g>
+                ))}
+              </g>
+            )}
 
             {/* Earth orbital zones (stylized — not to scale) */}
             {layers.orbits && (
@@ -288,6 +308,7 @@ export function SpaceCanvas() {
               style={{ filter: "drop-shadow(0 0 4px rgba(148,163,184,0.4))" }}
             />
             <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 32} textAnchor="middle" fill="#94a3b8" fontSize={9} fontFamily="ui-monospace,monospace">MOON</text>
+            <text x={EARTH_X + MOON_OFFSET} y={EARTH_Y + 44} textAnchor="middle" fill="#475569" fontSize={7} fontFamily="ui-monospace,monospace">0.0026 AU</text>
           </g>
 
           {/* MARS */}

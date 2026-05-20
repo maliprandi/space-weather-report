@@ -2,6 +2,7 @@ import { useDash, type LayerKey } from "@/state/dashboard";
 import { THREAT_COLOR, THREAT_LABEL } from "@/lib/threat";
 import { TYPE_COLOR } from "@/lib/eventColors";
 import { MISSIONS, type Mission } from "@/data/missions";
+import { INFO_CARDS } from "@/data/infoCards";
 import { useEffect, useMemo, useRef } from "react";
 
 const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[] = [
@@ -10,6 +11,7 @@ const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[
   { key: "gst", label: "Geomagnetic Storms", color: TYPE_COLOR.gst, hint: "NASA DONKI · GST" },
   { key: "neo", label: "Near-Earth Objects", color: TYPE_COLOR.neo, hint: "NASA NeoWs feed" },
   { key: "orbits", label: "Earth Orbital Zones", color: "#64748b", hint: "LEO · MEO · GEO · HEO" },
+  { key: "vanAllen", label: "Van Allen Belts", color: "#c4b5fd", hint: "Inner & outer radiation belts" },
   { key: "missions", label: "Spacecraft Assets", color: "#22d3ee", hint: "Curated catalog" },
 ];
 
@@ -22,9 +24,10 @@ const TYPE_LABEL: Record<Mission["type"], string> = {
 };
 
 export function RightRail() {
-  const { layers, toggleLayer, events, selectedId, select, selectedMissionId, selectMission } = useDash();
+  const { layers, toggleLayer, events, selectedId, select, selectedMissionId, selectMission, selectedInfoId, selectInfo } = useDash();
   const selected = useMemo(() => events.find((e) => e.id === selectedId), [events, selectedId]);
   const selectedMission = useMemo(() => MISSIONS.find((m) => m.id === selectedMissionId), [selectedMissionId]);
+  const selectedInfo = selectedInfoId ? INFO_CARDS[selectedInfoId] : undefined;
 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   useEffect(() => {
@@ -68,6 +71,29 @@ export function RightRail() {
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
+        {/* Selected info overlay (Van Allen, etc.) */}
+        {selectedInfo && (
+          <div className="border-b border-purple-900/60 bg-purple-950/10 px-4 py-3">
+            <div className="mb-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-purple-300">
+              <span>{selectedInfo.category}</span>
+              <button onClick={() => selectInfo(null)} className="text-slate-600 hover:text-slate-300">CLEAR ✕</button>
+            </div>
+            <h3 className="text-base font-semibold tracking-tight text-slate-100">{selectedInfo.title}</h3>
+            <div className="mt-0.5 text-[10px] text-purple-200/70">{selectedInfo.subtitle}</div>
+            <p className="mt-2 border-l-2 border-purple-500/60 bg-purple-950/30 px-3 py-2 text-[12px] leading-relaxed text-purple-50">
+              {selectedInfo.description}
+            </p>
+            <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5">
+              {selectedInfo.details.map(([k, v]) => (
+                <div key={k} className="border-b border-slate-900/80 pb-1">
+                  <dt className="text-[9px] uppercase tracking-widest text-slate-500">{k}</dt>
+                  <dd className="text-[11px] text-slate-200">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+
         {/* Selected event */}
         <div className="border-b border-cyan-950/60 px-4 py-3">
           <div className="mb-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-slate-500">

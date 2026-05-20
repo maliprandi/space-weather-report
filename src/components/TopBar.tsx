@@ -20,7 +20,7 @@ export function TopBar() {
       <div className="flex items-center gap-6">
         <div>
           <div className="text-[10px] text-cyan-400">SPACE WEATHER REPORT</div>
-          <div className="text-[13px] font-semibold tracking-[0.2em] text-slate-100">SOL · TERRA · LUNA</div>
+          <div className="text-[13px] font-semibold tracking-[0.2em] text-slate-100">SOL · TERRA · LUNA · MARS</div>
         </div>
         <div className="flex items-center gap-2">
           <span
