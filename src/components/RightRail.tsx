@@ -33,9 +33,10 @@ export function RightRail() {
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (selectedMissionId && cardRefs.current[selectedMissionId]) {
-      cardRefs.current[selectedMissionId]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      cardRefs.current[selectedMissionId]?.scrollIntoView({ behavior: "auto", block: "nearest" });
     }
   }, [selectedMissionId]);
+
   useEffect(() => {
     if ((selectedId || selectedInfoId) && scrollRef.current) {
       scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
