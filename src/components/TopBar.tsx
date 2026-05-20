@@ -30,7 +30,7 @@ export function TopBar() {
                 : "border-slate-700/60 bg-slate-900/40 text-slate-500"
             }`}
           >
-            ● LIVE
+            ● SIM
           </span>
           {loading && <span className="text-amber-300">LOADING...</span>}
           {error && <span className="text-red-400">ERR · {error}</span>}
