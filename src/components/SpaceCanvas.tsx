@@ -518,17 +518,44 @@ export function SpaceCanvas() {
             });
           })()}
 
-          {/* NEOs */}
+          {/* NEOs — each placed around Earth at a radius scaled by miss distance,
+              with a flyby trajectory that grazes the close-approach point (never
+              striking Earth unless the miss distance is essentially zero). */}
           {neos.map(({ ev }) => {
             const angle = ((ev.angleDeg ?? 0) * Math.PI) / 180;
-            const r = 90 + (Math.abs((ev.angleDeg ?? 0)) * 2);
-            const x = EARTH_X + Math.cos(angle + Math.PI) * r;
-            const y = EARTH_Y + Math.sin(angle + Math.PI) * r;
+            // Moon orbit (~1 LD) is at MOON_OFFSET=280 svg units from Earth.
+            // Map miss distances logarithmically into ~80–360 svg units so
+            // both close (<1 LD) and far (>50 LD) passes are visible.
+            const ld = Math.max(0.05, ev.missLD ?? 5);
+            const r = 80 + Math.min(360, 60 * Math.log10(ld + 1) + 120);
+            const x = EARTH_X + Math.cos(angle) * r;
+            const y = EARTH_Y + Math.sin(angle) * r;
+            // Trajectory: a line tangent to the close-approach point,
+            // perpendicular to the Earth→NEO radius, extending ±260 units.
+            const tx0 = -Math.sin(angle);
+            const ty0 = Math.cos(angle);
+            const L = 260;
+            const x1 = x + tx0 * L;
+            const y1 = y + ty0 * L;
+            const x2 = x - tx0 * L;
+            const y2 = y - ty0 * L;
             const color = TYPE_COLOR.neo;
+            const active = selectedId === ev.id;
+            // Size hints visual scale: tiny dot for small, larger for big.
+            const dia = ev.diameter ?? 50;
+            const base = Math.max(3, Math.min(8, 2 + Math.log10(dia + 1) * 2));
             return (
-              <g key={ev.id} onClick={() => select(ev.id)} className="cursor-pointer">
-                <line x1={x} y1={y} x2={EARTH_X} y2={EARTH_Y} stroke={color} strokeWidth={0.8} opacity={0.5} strokeDasharray="2 3" />
-                <circle cx={x} cy={y} r={selectedId === ev.id ? 9 : 5} fill={color} stroke="#fff" strokeWidth={selectedId === ev.id ? 1 : 0} />
+              <g key={ev.id} onClick={(e) => { e.stopPropagation(); select(ev.id); }} className="cursor-pointer">
+                <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth={0.8} opacity={0.45} strokeDasharray="2 3" pointerEvents="none" />
+                <circle cx={x} cy={y} r={active ? base + 4 : base} fill={color} stroke="#fff" strokeWidth={active ? 1.2 : 0} />
+                {active && (
+                  <circle cx={x} cy={y} r={base + 8} fill="none" stroke={color} strokeWidth={1.2} opacity={0.7}>
+                    <animate attributeName="r" values={`${base + 6};${base + 14};${base + 6}`} dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.8;0.1;0.8" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                {/* Enlarged hit target */}
+                <circle cx={x} cy={y} r={14} fill="transparent" />
               </g>
             );
           })}
