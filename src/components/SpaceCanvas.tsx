@@ -103,27 +103,69 @@ export function SpaceCanvas() {
     return () => ro.disconnect();
   }, []);
 
+  // Zoom anchored at a given SVG-space point: keep that point fixed under the cursor.
+  const zoomAt = (svgX: number, svgY: number, newScaleRaw: number) => {
+    const newScale = Math.min(3, Math.max(0.5, newScaleRaw));
+    setScale((s) => {
+      // Solve: svgX = newTx + worldX * newScale, where worldX = (svgX - tx) / s
+      setTx((t) => svgX - ((svgX - t) / s) * newScale);
+      setTy((t) => svgY - ((svgY - t) / s) * newScale);
+      return newScale;
+    });
+  };
+
+  // Convert a client (pixel) point to SVG user-space coordinates.
+  const clientToSvg = (clientX: number, clientY: number): { x: number; y: number } => {
+    const svg = svgRef.current;
+    if (!svg) return { x: W / 2, y: H / 2 };
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: W / 2, y: H / 2 };
+    const p = pt.matrixTransform(ctm.inverse());
+    return { x: p.x, y: p.y };
+  };
+
   useEffect(() => {
     const handler = (e: WheelEvent) => {
       if (!svgRef.current?.contains(e.target as Node)) return;
       e.preventDefault();
-      const delta = -e.deltaY * 0.001;
-      setScale((s) => Math.min(3, Math.max(0.5, s + delta)));
+      const svg = svgRef.current;
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return;
+      const p = pt.matrixTransform(ctm.inverse());
+      const factor = Math.exp(-e.deltaY * 0.0015);
+      zoomAt(p.x, p.y, scale * factor);
     };
     window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
-  }, []);
+  }, [scale, tx, ty]);
 
   const onMouseDown = (e: React.MouseEvent) => {
-    dragging.current = { x: e.clientX - tx, y: e.clientY - ty };
+    const p = clientToSvg(e.clientX, e.clientY);
+    dragging.current = { x: p.x - tx, y: p.y - ty };
   };
   const onMouseMove = (e: React.MouseEvent) => {
     if (!dragging.current) return;
-    setTx(e.clientX - dragging.current.x);
-    setTy(e.clientY - dragging.current.y);
+    const p = clientToSvg(e.clientX, e.clientY);
+    setTx(p.x - dragging.current.x);
+    setTy(p.y - dragging.current.y);
   };
   const onMouseUp = () => {
     dragging.current = null;
+  };
+
+  // Zoom anchored at the center of the viewport (for + / - buttons).
+  const zoomAtCenter = (newScaleRaw: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const { x, y } = clientToSvg(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    zoomAt(x, y, newScaleRaw);
   };
 
   // Active events at cursor
@@ -429,13 +471,13 @@ export function SpaceCanvas() {
       {/* Zoom controls */}
       <div className="absolute bottom-4 left-4 flex gap-1 font-mono text-xs">
         <button
-          onClick={() => setScale((s) => Math.min(3, s + 0.2))}
+          onClick={() => zoomAtCenter(scale * 1.25)}
           className="border border-cyan-900 bg-black/60 px-2 py-1 text-cyan-300 hover:bg-cyan-950"
         >
           +
         </button>
         <button
-          onClick={() => setScale((s) => Math.max(0.5, s - 0.2))}
+          onClick={() => zoomAtCenter(scale / 1.25)}
           className="border border-cyan-900 bg-black/60 px-2 py-1 text-cyan-300 hover:bg-cyan-950"
         >
           −
