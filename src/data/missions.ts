@@ -16,17 +16,19 @@ export interface Mission {
   crew?: string;
   payload: string;
   mission: string;
+  orbit: string; // e.g. "≈408 km altitude (LEO)"
   description: string;
 }
 
-// Earth-Moon distance maps to ~280px in canvas (see SpaceCanvas).
+// Earth radius in canvas ≈ 48px, LEO ring at r=58. LEO assets are placed
+// just outside the Earth disk on the LEO ring so they're visibly off-planet.
 export const MISSIONS: Mission[] = [
   {
     id: "iss",
     name: "ISS",
     fullName: "International Space Station",
     type: "leo",
-    x: 14, y: -10,
+    x: 44, y: -44,
     status: "active",
     country: "International",
     flag: "🌐",
@@ -35,15 +37,16 @@ export const MISSIONS: Mission[] = [
     mass: "≈ 420,000 kg",
     crew: "7 (Expedition crew)",
     payload: "Microgravity labs, EVA suites, robotic arms (Canadarm2)",
-    mission: "Crewed orbital laboratory at ~408 km altitude",
-    description: "Continuously inhabited since 2000. Hosts microgravity research across biology, physics, materials, and Earth observation.",
+    mission: "Crewed orbital laboratory",
+    orbit: "≈ 408 km altitude (LEO)",
+    description: "Continuously inhabited since November 2000, the ISS is the largest crewed structure ever placed in orbit. It circles Earth roughly every 90 minutes at ~7.66 km/s and hosts long-duration research across biology, fluid physics, materials science, combustion, and Earth observation. The station also serves as a testbed for life-support, ECLSS, and human-health technologies that feed directly into Artemis and future Mars missions.",
   },
   {
     id: "tiangong",
     name: "Tiangong",
     fullName: "Tiangong Space Station",
     type: "leo",
-    x: -14, y: 10,
+    x: 44, y: 44,
     status: "active",
     country: "China",
     flag: "🇨🇳",
@@ -52,15 +55,16 @@ export const MISSIONS: Mission[] = [
     mass: "≈ 100,000 kg",
     crew: "3 (Shenzhou rotations)",
     payload: "Wentian & Mengtian science modules, robotic arm",
-    mission: "Crewed modular station in LEO at ~390 km",
-    description: "China's third-generation space station. Modular T-shape with science labs for biotech, fluid physics, and astronomy (Xuntian co-orbital telescope planned).",
+    mission: "Crewed modular station in LEO",
+    orbit: "≈ 390 km altitude (LEO), 41.5° inclination",
+    description: "China's third-generation, modular T-shaped station, assembled from the Tianhe core and Wentian/Mengtian lab modules. Hosts experiments in biotech, fluid physics, combustion, and fundamental physics, plus external payload mounts for astronomy and Earth science. The co-orbiting Xuntian optical telescope is planned to dock periodically for servicing.",
   },
   {
     id: "hubble",
     name: "HST",
     fullName: "Hubble Space Telescope",
     type: "leo",
-    x: -18, y: -6,
+    x: -44, y: -44,
     status: "active",
     country: "USA · Europe",
     flag: "🇺🇸",
@@ -68,8 +72,9 @@ export const MISSIONS: Mission[] = [
     launched: "1990",
     mass: "11,110 kg",
     payload: "2.4 m optical/UV telescope, WFC3, COS, ACS, STIS",
-    mission: "Optical/UV space observatory at ~535 km",
-    description: "Workhorse observatory operating in visible, near-UV and near-IR. Five servicing missions kept it alive for 30+ years.",
+    mission: "Optical / UV / near-IR space observatory",
+    orbit: "≈ 535 km altitude (LEO), 28.5° inclination",
+    description: "Hubble has been the workhorse of optical astronomy for over three decades. Five Space Shuttle servicing missions (1993–2009) upgraded its instruments and gyros, keeping it scientifically productive far beyond original plans. It continues to support exoplanet transit spectroscopy, supernova cosmology, and time-domain follow-up alongside JWST.",
   },
   {
     id: "jwst",
@@ -84,8 +89,9 @@ export const MISSIONS: Mission[] = [
     launched: "Dec 2021",
     mass: "6,200 kg",
     payload: "6.5 m segmented IR telescope (NIRCam, NIRSpec, MIRI, FGS/NIRISS)",
-    mission: "Infrared observatory at Sun–Earth L2",
-    description: "Largest space telescope ever flown. Observes early-universe galaxies, exoplanet atmospheres, and star formation in the infrared.",
+    mission: "Flagship infrared observatory",
+    orbit: "Halo orbit around Sun–Earth L2 (~1.5M km from Earth)",
+    description: "The largest space telescope ever flown. Its 6.5 m gold-coated beryllium primary and tennis-court-sized sunshield enable observations of the earliest galaxies, exoplanet atmospheres, protoplanetary disks, and Kuiper-belt bodies in the 0.6–28 µm range. Operated from a quasi-halo orbit around L2 for thermal stability and unobstructed sky.",
   },
   {
     id: "soho",
@@ -100,8 +106,9 @@ export const MISSIONS: Mission[] = [
     launched: "Dec 1995",
     mass: "1,850 kg",
     payload: "12 instruments incl. LASCO coronagraph, EIT, MDI",
-    mission: "Continuous solar observation from Sun–Earth L1",
-    description: "Primary CME and solar wind sentinel. Provides the imagery feeding most space-weather alerts and has discovered 4,000+ comets.",
+    mission: "Continuous solar observation",
+    orbit: "Halo orbit around Sun–Earth L1 (~1.5M km sunward of Earth)",
+    description: "The flagship CME and solar-wind sentinel. SOHO's LASCO coronagraphs supply the bulk of imagery driving NOAA space-weather alerts, while its helioseismology instruments probe the Sun's interior. It is also the most prolific comet discoverer in history, with over 4,000 sungrazing comets identified.",
   },
   {
     id: "dscovr",
@@ -116,8 +123,9 @@ export const MISSIONS: Mission[] = [
     launched: "Feb 2015",
     mass: "570 kg",
     payload: "EPIC camera, NISTAR radiometer, Faraday cup, magnetometer",
-    mission: "Solar wind monitor & Earth-disk imaging from L1",
-    description: "Provides ~15–60 min warning of incoming geomagnetic storms and hosts the EPIC camera that captures full-disk Earth images.",
+    mission: "Solar wind monitor & Earth-disk imaging",
+    orbit: "Lissajous orbit around Sun–Earth L1 (~1.5M km from Earth)",
+    description: "NOAA's primary operational solar-wind sentinel. Faraday-cup and magnetometer measurements give 15–60 minutes of warning before geomagnetic storms arrive at Earth. Its EPIC camera captures full-disk, sun-lit Earth images used for ozone, aerosol, cloud, and vegetation science.",
   },
   {
     id: "ace",
@@ -132,8 +140,9 @@ export const MISSIONS: Mission[] = [
     launched: "Aug 1997",
     mass: "785 kg",
     payload: "9 instruments measuring solar wind ions, electrons, cosmic rays",
-    mission: "Solar wind composition & space-weather sentinel at L1",
-    description: "Long-running heliophysics platform. Real-time solar wind data feeds NOAA space weather operations.",
+    mission: "Solar wind composition & space-weather sentinel",
+    orbit: "Lissajous orbit around Sun–Earth L1 (~1.5M km from Earth)",
+    description: "Long-running heliophysics platform measuring the elemental and isotopic composition of solar wind, solar energetic particles, and galactic cosmic rays. Its real-time solar-wind beacon feeds NOAA SWPC and is a backbone input for geomagnetic-storm forecasting alongside DSCOVR.",
   },
   {
     id: "capstone",
@@ -148,8 +157,9 @@ export const MISSIONS: Mission[] = [
     launched: "Jun 2022",
     mass: "25 kg (12U CubeSat)",
     payload: "Navigation experiments, CAPS autonomous nav software",
-    mission: "Pathfinder in near-rectilinear halo orbit around the Moon",
-    description: "Validates the NRHO planned for Lunar Gateway and tests spacecraft-to-spacecraft navigation with LRO.",
+    mission: "Pathfinder for Lunar Gateway's halo orbit",
+    orbit: "Near-Rectilinear Halo Orbit (NRHO) around the Moon, ~1,600 km × 70,000 km",
+    description: "CAPSTONE is a 25 kg CubeSat that became the first spacecraft to fly the Near-Rectilinear Halo Orbit that NASA's Lunar Gateway will eventually occupy. It is validating the orbit's stability and station-keeping requirements, demonstrating the CAPS autonomous peer-to-peer navigation software with LRO, and reducing risk for crewed Artemis missions by characterizing the gravitational environment of cislunar space.",
   },
   {
     id: "lro",
@@ -164,8 +174,9 @@ export const MISSIONS: Mission[] = [
     launched: "Jun 2009",
     mass: "1,846 kg",
     payload: "LROC cameras, LOLA altimeter, Diviner, LEND, LAMP, CRaTER, Mini-RF",
-    mission: "Polar lunar orbit, mapping & site selection",
-    description: "High-resolution lunar mapper supporting Artemis landing-site selection and resource prospecting (notably south-pole water ice).",
+    mission: "High-resolution lunar mapping & site selection",
+    orbit: "Polar lunar orbit, ≈ 50 km mean altitude",
+    description: "The highest-resolution global mapper of the Moon. LRO has imaged Apollo landing sites at sub-meter scale, characterized permanently shadowed craters at the lunar poles, and detected hydrogen-rich (water ice) deposits with LEND. Its data underpins Artemis landing-site selection and in-situ resource utilization planning.",
   },
   {
     id: "gateway",
@@ -181,7 +192,8 @@ export const MISSIONS: Mission[] = [
     mass: "≈ 63,000 kg (assembled)",
     crew: "4 (visiting Artemis crews)",
     payload: "PPE, HALO, I-HAB, ESPRIT, Canadarm3",
-    mission: "Crewed outpost in lunar NRHO supporting Artemis",
-    description: "Modular cislunar station serving as staging point for crewed lunar surface missions and deep-space exploration tech demos.",
+    mission: "Crewed cislunar outpost supporting Artemis",
+    orbit: "Near-Rectilinear Halo Orbit (NRHO) around the Moon",
+    description: "A small, modular crewed station planned for the same NRHO that CAPSTONE is pathfinding. Gateway will serve as a staging point for crewed lunar-surface missions, host deep-space life-support and radiation-environment experiments, and provide a communications and rendezvous node for Human Landing Systems and international partner modules.",
   },
 ];

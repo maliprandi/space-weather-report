@@ -66,7 +66,7 @@ export function RightRail() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {/* Selected event */}
         <div className="border-b border-cyan-950/60 px-4 py-3">
           <div className="mb-2 flex items-center justify-between text-[10px] tracking-[0.25em] text-slate-500">
@@ -176,6 +176,7 @@ export function RightRail() {
                         <Spec k="Launched" v={m.launched} />
                         <Spec k="Mass" v={m.mass} />
                         {m.crew && <Spec k="Crew" v={m.crew} />}
+                        <Spec k="Orbit" v={m.orbit} wide />
                         <Spec k="Payload" v={m.payload} wide />
                         <Spec k="Mission" v={m.mission} wide />
                       </dl>
