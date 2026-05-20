@@ -8,6 +8,7 @@ const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[
   { key: "cme", label: "Coronal Mass Ejections", color: TYPE_COLOR.cme, hint: "NASA DONKI · CME" },
   { key: "gst", label: "Geomagnetic Storms", color: TYPE_COLOR.gst, hint: "NASA DONKI · GST" },
   { key: "neo", label: "Near-Earth Objects", color: TYPE_COLOR.neo, hint: "NASA NeoWs feed" },
+  { key: "orbits", label: "Earth Orbital Zones", color: "#64748b", hint: "LEO · MEO · GEO · HEO" },
   { key: "missions", label: "Cislunar Assets", color: "#22d3ee", hint: "Curated missions" },
   { key: "epic", label: "EPIC Earth Disk", color: "#60a5fa", hint: "NASA EPIC (TBD)" },
 ];
@@ -21,7 +22,7 @@ export function RightRail() {
       <div className="border-b border-cyan-950/60 px-4 py-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] tracking-[0.25em] text-slate-400">DATA LAYERS</span>
-          <span className="text-[10px] tracking-widest text-slate-500">6 AVAILABLE</span>
+          <span className="text-[10px] tracking-widest text-slate-500">7 AVAILABLE</span>
         </div>
       </div>
 

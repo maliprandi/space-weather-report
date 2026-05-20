@@ -19,14 +19,14 @@ export function TopBar() {
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-cyan-950/60 bg-[#070b14] px-5 font-mono text-[11px] tracking-widest text-slate-300">
       <div className="flex items-center gap-6">
         <div>
-          <div className="text-[10px] text-cyan-400">CISLUNAR.OPS</div>
+          <div className="text-[10px] text-cyan-400">SPACE WEATHER REPORT</div>
           <div className="text-[13px] font-semibold tracking-[0.2em] text-slate-100">SOL · TERRA · LUNA</div>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`rounded-sm border px-2 py-0.5 text-[9px] ${
+            className={`rounded-sm border px-3 py-1 text-[11px] font-semibold tracking-widest ${
               playing
-                ? "border-emerald-600/60 bg-emerald-950/30 text-emerald-300"
+                ? "border-emerald-600/60 bg-emerald-950/40 text-emerald-300"
                 : "border-slate-700/60 bg-slate-900/40 text-slate-500"
             }`}
           >
