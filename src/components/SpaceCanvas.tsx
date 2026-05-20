@@ -238,6 +238,25 @@ export function SpaceCanvas() {
             <circle cx={EARTH_X} cy={EARTH_Y} r={48} fill="url(#earthGrad)" stroke="#3b82f6" strokeWidth={1} />
             <text x={EARTH_X} y={EARTH_Y + 72} textAnchor="middle" fill="#60a5fa" fontSize={11} fontFamily="ui-monospace,monospace" letterSpacing={3}>EARTH</text>
 
+            {/* Earth orbital zones (stylized — not to scale) */}
+            {layers.orbits && (
+              <g fontFamily="ui-monospace,monospace" fontSize={8} fill="#64748b">
+                {[
+                  { r: 58, label: "LEO", note: "≤2,000 km" },
+                  { r: 78, label: "MEO", note: "2k–35k km" },
+                  { r: 104, label: "GEO", note: "35,786 km" },
+                  { r: 180, label: "HEO", note: "highly elliptical" },
+                ].map((o) => (
+                  <g key={o.label}>
+                    <circle cx={EARTH_X} cy={EARTH_Y} r={o.r} fill="none" stroke="#334155" strokeDasharray="1 5" strokeWidth={0.8} opacity={0.7} />
+                    <text x={EARTH_X} y={EARTH_Y - o.r - 3} textAnchor="middle" fill="#64748b" letterSpacing={2}>
+                      {o.label}
+                    </text>
+                  </g>
+                ))}
+              </g>
+            )}
+
             {/* Moon orbit */}
             <circle cx={EARTH_X} cy={EARTH_Y} r={MOON_OFFSET} fill="none" stroke="#1e293b" strokeDasharray="2 4" />
             <circle cx={EARTH_X + MOON_OFFSET} cy={EARTH_Y} r={14} fill="#94a3b8" />
