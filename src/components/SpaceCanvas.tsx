@@ -133,8 +133,18 @@ export function SpaceCanvas() {
   const gstGlowColor = gsts.length > 0 ? TYPE_COLOR.gst : null;
 
 
+  // Distance scale: compute how many real km a ~180px bar represents at current zoom.
+  // SVG uses preserveAspectRatio="xMidYMid slice": svg-units-per-screen-pixel =
+  // min(W/containerW, H/containerH).
+  const svgPerPx = dims.w > 0 && dims.h > 0 ? Math.min(W / dims.w, H / dims.h) : 1;
+  const TARGET_PX = 180;
+  const rawKm = (TARGET_PX * svgPerPx * KM_PER_UNIT) / scale;
+  const niceKm = niceRound(rawKm);
+  const scaleBarPx = (niceKm / KM_PER_UNIT) * scale / svgPerPx;
+
   return (
     <div
+      ref={containerRef}
       className="relative h-full w-full overflow-hidden bg-[#05070d] cursor-grab active:cursor-grabbing"
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
