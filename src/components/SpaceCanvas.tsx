@@ -255,34 +255,8 @@ export function SpaceCanvas() {
             <text x={SUN_X} y={SUN_Y + 164} textAnchor="middle" fill="#92400e" fontSize={8} fontFamily="ui-monospace,monospace">0 AU</text>
           </g>
 
-          {/* CMEs */}
-          {cmes.map(({ ev, progress }) => {
-            const angle = ((ev.angleDeg ?? 0) * Math.PI) / 180;
-            const distance = 60 + progress * 900;
-            const x = SUN_X + Math.cos(angle) * distance;
-            const y = SUN_Y + Math.sin(angle) * distance;
-            const color = TYPE_COLOR.cme;
-            return (
-              <g key={ev.id}>
-                <path
-                  d={`M ${SUN_X} ${SUN_Y} L ${x} ${y}`}
-                  stroke={color}
-                  strokeWidth={2}
-                  opacity={0.5}
-                />
-                <circle cx={x} cy={y} r={selectedId === ev.id ? 14 : 8} fill={color} opacity={0.9} onClick={() => select(ev.id)} className="cursor-pointer">
-                  <animate attributeName="r" values="6;12;6" dur="2s" repeatCount="indefinite" />
-                </circle>
-                {/* arrow head */}
-                <polygon
-                  points={`${x},${y - 6} ${x + 12},${y} ${x},${y + 6}`}
-                  fill={color}
-                  transform={`rotate(${(ev.angleDeg ?? 0)} ${x} ${y})`}
-                  opacity={0.85}
-                />
-              </g>
-            );
-          })}
+          {/* CMEs render order moved below — see after MARS */}
+
 
           {/* EARTH */}
           <g>
