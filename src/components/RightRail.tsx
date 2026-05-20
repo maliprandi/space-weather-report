@@ -76,7 +76,7 @@ export function RightRail() {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
         {/* Selected info overlay (Van Allen, etc.) */}
         {selectedInfo && (
           <div className="border-b border-purple-900/60 bg-purple-950/10 px-4 py-3">
