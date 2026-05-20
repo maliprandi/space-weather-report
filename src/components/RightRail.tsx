@@ -8,6 +8,7 @@ const LAYER_DEFS: { key: LayerKey; label: string; color: string; hint: string }[
   { key: "cme", label: "Coronal Mass Ejections", color: TYPE_COLOR.cme, hint: "NASA DONKI · CME" },
   { key: "gst", label: "Geomagnetic Storms", color: TYPE_COLOR.gst, hint: "NASA DONKI · GST" },
   { key: "neo", label: "Near-Earth Objects", color: TYPE_COLOR.neo, hint: "NASA NeoWs feed" },
+  { key: "orbits", label: "Earth Orbital Zones", color: "#64748b", hint: "LEO · MEO · GEO · HEO" },
   { key: "missions", label: "Cislunar Assets", color: "#22d3ee", hint: "Curated missions" },
   { key: "epic", label: "EPIC Earth Disk", color: "#60a5fa", hint: "NASA EPIC (TBD)" },
 ];
