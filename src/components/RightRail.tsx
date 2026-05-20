@@ -22,7 +22,7 @@ export function RightRail() {
       <div className="border-b border-cyan-950/60 px-4 py-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] tracking-[0.25em] text-slate-400">DATA LAYERS</span>
-          <span className="text-[10px] tracking-widest text-slate-500">6 AVAILABLE</span>
+          <span className="text-[10px] tracking-widest text-slate-500">7 AVAILABLE</span>
         </div>
       </div>
 
