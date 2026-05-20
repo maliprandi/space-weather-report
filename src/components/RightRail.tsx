@@ -30,11 +30,17 @@ export function RightRail() {
   const selectedInfo = selectedInfoId ? INFO_CARDS[selectedInfoId] : undefined;
 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (selectedMissionId && cardRefs.current[selectedMissionId]) {
       cardRefs.current[selectedMissionId]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [selectedMissionId]);
+  useEffect(() => {
+    if ((selectedId || selectedInfoId) && scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedId, selectedInfoId]);
 
   return (
     <aside className="flex h-full w-[380px] shrink-0 flex-col border-l border-cyan-950/60 bg-[#070b14] font-mono text-[11px] text-slate-300">
