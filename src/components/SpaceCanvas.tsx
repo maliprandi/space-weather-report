@@ -153,8 +153,7 @@ export function SpaceCanvas() {
   const onMouseMove = (e: React.MouseEvent) => {
     if (!dragging.current) return;
     const p = clientToSvg(e.clientX, e.clientY);
-    setTx(p.x - dragging.current.x);
-    setTy(p.y - dragging.current.y);
+    setView((view) => ({ ...view, tx: p.x - dragging.current!.x, ty: p.y - dragging.current!.y }));
   };
   const onMouseUp = () => {
     dragging.current = null;
@@ -166,7 +165,7 @@ export function SpaceCanvas() {
     if (!el) return;
     const rect = el.getBoundingClientRect();
     const { x, y } = clientToSvg(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    zoomAt(x, y, newScaleRaw);
+    zoomAt(x, y, newScaleRaw / scale);
   };
 
   // Active events at cursor
@@ -484,7 +483,7 @@ export function SpaceCanvas() {
           −
         </button>
         <button
-          onClick={() => { setScale(1); setTx(0); setTy(0); }}
+          onClick={() => setView({ scale: 1, tx: 0, ty: 0 })}
           className="border border-cyan-900 bg-black/60 px-3 py-1 text-cyan-300 hover:bg-cyan-950 tracking-widest"
         >
           RESET VIEW
