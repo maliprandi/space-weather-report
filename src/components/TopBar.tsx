@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDash } from "@/state/dashboard";
+import { TYPE_COLOR } from "@/lib/eventColors";
 
 export function TopBar() {
-  const { events, loading, error, windowStart, windowEnd } = useDash();
+  const { events, loading, error, windowStart, windowEnd, playing } = useDash();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -19,21 +20,28 @@ export function TopBar() {
       <div className="flex items-center gap-6">
         <div>
           <div className="text-[10px] text-cyan-400">CISLUNAR.OPS</div>
-          <div className="text-[13px] font-semibold tracking-[0.2em] text-slate-100">SOL · TERRA · LUNA — GOD'S EYE VIEW</div>
+          <div className="text-[13px] font-semibold tracking-[0.2em] text-slate-100">SOL · TERRA · LUNA</div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-sm border border-emerald-600/60 bg-emerald-950/30 px-2 py-0.5 text-[9px] text-emerald-300">● LIVE</span>
-          <span className="rounded-sm border border-cyan-700/60 bg-cyan-950/30 px-2 py-0.5 text-[9px] text-cyan-300">OPERATIONAL</span>
+          <span
+            className={`rounded-sm border px-2 py-0.5 text-[9px] ${
+              playing
+                ? "border-emerald-600/60 bg-emerald-950/30 text-emerald-300"
+                : "border-slate-700/60 bg-slate-900/40 text-slate-500"
+            }`}
+          >
+            ● LIVE
+          </span>
           {loading && <span className="text-amber-300">LOADING...</span>}
           {error && <span className="text-red-400">ERR · {error}</span>}
         </div>
       </div>
 
       <div className="flex items-center gap-5 text-[10px]">
-        <Counter label="FLR" value={counts.flare ?? 0} color="#f97316" />
-        <Counter label="CME" value={counts.cme ?? 0} color="#eab308" />
-        <Counter label="GST" value={counts.gst ?? 0} color="#a78bfa" />
-        <Counter label="NEO" value={counts.neo ?? 0} color="#22d3ee" />
+        <Counter label="FLR" value={counts.flare ?? 0} color={TYPE_COLOR.flare} />
+        <Counter label="CME" value={counts.cme ?? 0} color={TYPE_COLOR.cme} />
+        <Counter label="GST" value={counts.gst ?? 0} color={TYPE_COLOR.gst} />
+        <Counter label="NEO" value={counts.neo ?? 0} color={TYPE_COLOR.neo} />
         <div className="border-l border-slate-800 pl-5">
           <div className="text-slate-500">UTC</div>
           <div className="text-slate-100">{now.toISOString().replace("T", " ").slice(0, 19)}</div>
