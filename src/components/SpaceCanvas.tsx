@@ -300,7 +300,7 @@ export function SpaceCanvas() {
                       strokeDasharray="2 3" pointerEvents="none"
                     />
                     <text
-                      x={EARTH_X - b.r - 6} y={EARTH_Y + b.labelY}
+                      x={EARTH_X + b.labelX} y={EARTH_Y + b.labelY}
                       textAnchor="end" fill="#c4b5fd" fontSize={8}
                       fontFamily="ui-monospace,monospace" letterSpacing={2}
                       pointerEvents="none"
