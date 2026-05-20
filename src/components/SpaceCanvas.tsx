@@ -84,7 +84,7 @@ const Starfield = () => {
 };
 
 export function SpaceCanvas() {
-  const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission } = useDash();
+  const { events, cursorTime, layers, selectedId, select, selectedMissionId, selectMission, selectInfo } = useDash();
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
   const [scale, setScale] = useState(1);
