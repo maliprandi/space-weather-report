@@ -26,6 +26,8 @@ export interface DashEvent {
   angleDeg?: number; // direction of travel from origin
   speed?: number; // km/s for cme
   earthDirected?: boolean;
+  missLD?: number; // neo: miss distance in lunar distances
+  diameter?: number; // neo: avg diameter in meters
 }
 
 const LD_KM = 384_400;
