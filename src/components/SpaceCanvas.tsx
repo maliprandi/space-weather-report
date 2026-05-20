@@ -359,6 +359,46 @@ export function SpaceCanvas() {
             <text x={MARS_X} y={MARS_Y + 70} textAnchor="middle" fill="#7c2d12" fontSize={8} fontFamily="ui-monospace,monospace">1.524 AU</text>
           </g>
 
+          {/* CMEs — rendered after planets so nodes stay on top and clickable */}
+          {cmes.map(({ ev, progress }) => {
+            const angle = ((ev.angleDeg ?? 0) * Math.PI) / 180;
+            const distance = 60 + progress * 900;
+            const x = SUN_X + Math.cos(angle) * distance;
+            const y = SUN_Y + Math.sin(angle) * distance;
+            const color = TYPE_COLOR.cme;
+            const active = selectedId === ev.id;
+            return (
+              <g key={ev.id} onClick={(e) => { e.stopPropagation(); select(ev.id); }} className="cursor-pointer">
+                <path
+                  d={`M ${SUN_X} ${SUN_Y} L ${x} ${y}`}
+                  stroke={color}
+                  strokeWidth={2}
+                  opacity={0.5}
+                  pointerEvents="none"
+                />
+                <circle cx={x} cy={y} r={active ? 12 : 8} fill={color} opacity={0.9} stroke="#fff" strokeWidth={active ? 1.5 : 0}>
+                  <animate attributeName="r" values={active ? "11;15;11" : "6;12;6"} dur="2s" repeatCount="indefinite" />
+                </circle>
+                {active && (
+                  <circle cx={x} cy={y} r={18} fill="none" stroke={color} strokeWidth={1.5} opacity={0.7}>
+                    <animate attributeName="r" values="16;26;16" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.8;0.1;0.8" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                <polygon
+                  points={`${x},${y - 6} ${x + 12},${y} ${x},${y + 6}`}
+                  fill={color}
+                  transform={`rotate(${(ev.angleDeg ?? 0)} ${x} ${y})`}
+                  opacity={0.85}
+                  pointerEvents="none"
+                />
+                {/* invisible enlarged hit target */}
+                <circle cx={x} cy={y} r={20} fill="transparent" />
+              </g>
+            );
+          })}
+
+
           {/* Lagrange points */}
           <g fontFamily="ui-monospace,monospace" fontSize={9} fill="#64748b">
             <circle cx={EARTH_X - 120} cy={EARTH_Y} r={3} fill="#64748b" />
